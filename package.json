@@ -1,0 +1,25 @@
+{
+  "name": "libx.styles",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Livshitz/libx.styles.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Livshitz/libx.styles/issues"
+  },
+  "homepage": "https://github.com/Livshitz/libx.styles#readme",
+  "dependencies": {
+    "libx.js": "0.0.18"
+  }
+}
