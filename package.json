@@ -1,14 +1,13 @@
 {
   "name": "libx.fuser",
-  "version": "0.0.1",
+  "version": "0.0.8",
   "description": "",
   "main": "index.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "node index --env=prod"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -20,6 +19,7 @@
     "url": "https://github.com/Livshitz/libx.fuser/issues"
   },
   "homepage": "https://github.com/Livshitz/libx.fuser#readme",
+  "files": [ "dist/**", "src/**" ],
   "dependencies": {
     "algoliasearch": "^3.32.0",
     "angular": "^1.7.6",
@@ -32,6 +32,6 @@
     "angular-sanitize": "^1.7.6",
     "firebase": "^5.8.0",
     "jquery": "^3.3.1",
-    "libx.js": "0.0.18"
+    "libx.js": "^0.0.18"
   }
 }
