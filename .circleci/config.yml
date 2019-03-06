@@ -40,6 +40,8 @@ jobs:
             git config user.email "eli.livshitz@gmail.com"
             git config user.name "Eli Livshitz"
             npm version patch
+            git add *;
+            git commit -m "^ pkg bump"
             git push
       - run:
           name: Publish package
