@@ -39,7 +39,8 @@ jobs:
           command: |
             git config user.email "eli.livshitz@gmail.com"
             git config user.name "Eli Livshitz"
-            npm version patch -f
+            npm version patch
+            git push
       - run:
           name: Publish package
           command: npm publish
