@@ -3,8 +3,8 @@ const argv = require('yargs').argv;
 
 (async ()=>{
 	var shouldWatch = argv.watch;
-	var src = './src';
-	var dest = './dist';
+	var src = __dirname + '/./src';
+	var dest = __dirname + '/./dist';
 	infra.gulp.config.isProd = argv.env == "prod";
 	infra.gulp.config.workdir = src;
 
@@ -20,7 +20,7 @@ const argv = require('yargs').argv;
 	var build = async ()=> {
 		if (infra.gulp.getArgs().noDelete == null) { 
 			infra.log.info('- cleaning build folder: ', dest);
-			await infra.gulp.delete(dest);
+			await infra.gulp.delete(dest, {force: true});
 		}
 
 		var p1 = infra.gulp.copy(src + '/fonts/**/', dest + '/fonts', null, false);

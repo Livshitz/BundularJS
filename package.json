@@ -1,6 +1,6 @@
 {
   "name": "libx.fuser",
-  "version": "0.0.9",
+  "version": "0.0.15",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -21,7 +21,8 @@
   "homepage": "https://github.com/Livshitz/libx.fuser#readme",
   "files": [
     "dist/**",
-    "src/**"
+    "src/**",
+    "*.js"
   ],
   "dependencies": {
     "algoliasearch": "^3.32.0",
@@ -35,6 +36,6 @@
     "angular-sanitize": "^1.7.6",
     "firebase": "^5.8.0",
     "jquery": "^3.3.1",
-    "libx.js": "^0.0.21"
+    "libx.js": "^0.0.26"
   }
 }
