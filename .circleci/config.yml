@@ -6,6 +6,9 @@ defaults: &defaults
     - image: circleci/node:8.12
 
 jobs:
+  before_deploy:
+    <<: *defaults  
+    - npm version patch
   build:
     <<: *defaults  
     steps:
@@ -39,10 +42,10 @@ jobs:
           command: |
             git config user.email "eli.livshitz@gmail.com"
             git config user.name "Eli Livshitz"
-            npm version patch -f
-            git add *
-            git commit -m "^ pkg bump"
-            git push
+            npm version patch -m "^ pkg bump (%s) [skip ci]"
+            # git add *
+            # git commit -m "^ pkg bump"
+            # git push
       - run:
           name: Publish package
           command: npm publish
