@@ -32,17 +32,17 @@ jobs:
         name: Build
         command: node build-libs.js
 
-    #   - persist_to_workspace:
-    #       root: ~/repo
-    #       paths: .
+      #   - persist_to_workspace:
+      #       root: ~/repo
+      #       paths: .
 
       # ------------------------------------
       
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
-    #   - attach_workspace:
-    #       at: ~/repo
+      #   - attach_workspace:
+      #       at: ~/repo
       - run:
           name: package bump
           command: |
