@@ -12,7 +12,7 @@ let projconfig;
 	
 	var secretsFile = src + '/project-secrets.json';
 	var secretsKey = (argv.secret || process.env.FUSER_SECRET_KEY || "123").toString();
-	infra.log.info('!!! Secret key is: ', secretsKey);
+	// infra.log.info('!!! Secret key is: ', secretsKey);
 
 	// var fs = require('fs');
 	if (infra.gulp.getArgs().noDelete == null) { 
