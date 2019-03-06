@@ -39,6 +39,7 @@ jobs:
           command: |
             git config user.email "eli.livshitz@gmail.com"
             git config user.name "Eli Livshitz"
+            git add . && git commit
             npm version patch -m "^ pkg bump (%s) [skip ci]"
             # git add *
             # git commit -m "^ pkg bump"
