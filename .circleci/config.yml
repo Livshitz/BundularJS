@@ -1,0 +1,45 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:8.12
+
+jobs:
+  build:
+    <<: *defaults  
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+      # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: npm install
+    #   - run:
+    #       name: Run tests
+    #       command: npm test
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+    
+      - run:
+          name: Build
+          command: node build-libs.js
+      
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: package bump
+          command: |
+            git config user.email "eli.livshitz@gmail.com"
+            git config user.name "Eli Livshitz"
+            npm version patch -f
+      - run:
+          name: Publish package
+          command: npm publish
