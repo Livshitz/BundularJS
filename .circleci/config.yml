@@ -6,9 +6,6 @@ defaults: &defaults
     - image: circleci/node:8.12
 
 jobs:
-  before_deploy:
-    <<: *defaults  
-    - npm version patch
   build:
     <<: *defaults  
     steps:
