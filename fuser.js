@@ -22,7 +22,7 @@ let projconfig;
 
 	/*
 	// await libx.gulp.copy(['./test.js', 'libx.gulp.js'], dest, libx.gulp.middlewares.minify );
-	*/
+	*/ 
 
 	if (argv.secretsLock) {
 		try {
