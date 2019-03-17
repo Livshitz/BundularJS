@@ -112,8 +112,9 @@ let projconfig;
 			libx.gulp.middlewares.browserify({ bare: false }),
 			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minify()),
 			// libx.gulp.middlewares.concat('browserified.js'),
-			libx.gulp.middlewares.rename('browserified.js'),
-			libx.gulp.middlewares.liveReload(),
+			// libx.gulp.middlewares.rename('browserified.js'),
+			// libx.gulp.triggerChange(src + '/index.pug'),
+			// libx.gulp.middlewares.liveReload(),
 		], shouldWatch);
 		
 		await Promise.all([p1, p2, p3, p4 , p5, p6]);

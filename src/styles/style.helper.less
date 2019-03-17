@@ -111,11 +111,40 @@ img.no-resize { max-width:none; max-height:none; height: inherit; }
 .margin-bottom10 { margin-bottom:10px; }
 .margin-bottom15 { margin-bottom:15px; }
 .margin-bottom20 { margin-bottom:20px; }
+.margin-bottom40 { margin-bottom:40px; }
+.margin-bottom60 { margin-bottom:60px; }
 .margin-top0 {  margin-top:0px; }
 .margin-top5 {  margin-top:5px; }
 .margin-top10 { margin-top:10px; }
 .margin-top15 { margin-top:15px; }
 .margin-top20 { margin-top:20px; }
+.margin-top40 { margin-top:40px; }
+.margin-top60 { margin-top:60px; }
+.margin-right0 {  margin-right:0px; }
+.margin-right5 {  margin-right:5px; }
+.margin-right10 { margin-right:10px; }
+.margin-right15 { margin-right:15px; }
+.margin-right20 { margin-right:20px; }
+.margin-right40 { margin-right:40px; }
+.margin-right60 { margin-right:60px; }
+.margin-left0 {  margin-left:0px; }
+.margin-left5 {  margin-left:5px; }
+.margin-left10 { margin-left:10px; }
+.margin-left15 { margin-left:15px; }
+.margin-left20 { margin-left:20px; }
+.margin-left40 { margin-left:40px; }
+.margin-left60 { margin-left:60px; }
+
+@timesize:20px;
+.tab { margin-left:@timesize*1; }
+.tab-0 { .tab; margin-left:@timesize*0; }
+.tab-1 { .tab; margin-left:@timesize*1; }
+.tab-2 { .tab; margin-left:@timesize*2; }
+.tab-3 { .tab; margin-left:@timesize*3; }
+.tab-4 { .tab; margin-left:@timesize*4; }
+.tab-5 { .tab; margin-left:@timesize*5; }
+.tab-6 { .tab; margin-left:@timesize*6; }
+.tab:before, .tab-1:before, .tab-2:before, .tab-3:before, .tab-4:before, .tab-5:before, .tab-6:before { content:'- '; }
 
 .padding { .padding40; }
 .padding-v { .padding40; padding-right:0; padding-left:0; }
@@ -143,6 +172,7 @@ img.no-resize { max-width:none; max-height:none; height: inherit; }
 .sep-2x { .sep; margin:20px 0; }
 .sep-v { margin:0 20px; width:1px; min-height:25px; background-color:white; opacity:0.2; }
 .sep-h { margin:20px 0; width:30px; height:1px; background-color:rgb(230,230,230); opacity:0.8; }
+.ultra-small { font-size:8px !important; line-height:11px !important; }
 .smaller { font-size:10px !important; line-height:13px !important; }
 .small { font-size:12px !important; line-height:15px !important; }
 .mid { font-size:14px !important; line-height:16px !important; }
