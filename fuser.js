@@ -1,5 +1,5 @@
 const libx = require('libx.js');
-libx.node = require('libx.js/node');
+libx.gulp = require("libx.js/node/gulp");
 const path = require('path');
 const argv = require('yargs').argv;
 
@@ -65,8 +65,10 @@ let projconfig;
 	var shouldServeLibs = argv.libs || false;
 
 	process.on('uncaughtException', function (err) {
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		console.error(err.stack, err);
 		console.log("Node NOT Exiting...", err.stack, err);
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	});
 
 	// build:

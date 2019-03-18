@@ -1,4 +1,5 @@
 const libx = require("libx.js");
+libx.gulp = require("libx.js/node/gulp");
 const argv = require("yargs").argv;
 
 (async () => {
