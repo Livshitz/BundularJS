@@ -44,7 +44,10 @@ let projconfig;
 		return;
 	}
 	
-	projconfig = libx.gulp.readConfig(src + '/project.json', secretsKey);
+	projconfig = libx.getProjectConfig(src, secretsKey);
+	libx.gulp.projconfig = projconfig;
+
+	var projName = projconfig.projectName.replace('-','_')
 
 	libx.gulp.config.workdir = src;
 	libx.gulp.config.devServer.port = projconfig.private.debugPort;
@@ -155,6 +158,9 @@ let projconfig;
 			});
 		}
 
+		await libx.gulp.copy([src + '/project.json'], './api/build', null, shouldWatch);
+		await libx.gulp.copy([src + '/project-secrets.json'], './api/build', null, shouldWatch);
+
 		libx.log.info('build: done');
 	}
 
@@ -180,8 +186,9 @@ let projconfig;
 
 			var res = await libx.gulp.exec([
 				'cd api', 
-				'npm install', 
-				'firebase deploy -P {0} --only functions:api2 --token "{1}"'.format(projconfig.firebaseProjectName, projconfig.private.firebaseToken)
+				// 'npm install', 
+				'firebase functions:config:set {0}.fuser_secret_key="{1}"'.format(projName, secretsKey),
+				'firebase deploy -P {0} --only functions:{2}{3} --token "{1}"'.format(projconfig.firebaseProjectName, projconfig.private.firebaseToken, projName, argv.specificFunction ? ('-' + argv.specificFunction) : '')
 			], true);
 		} catch (ex) {
 			console.log('error: ', ex);
