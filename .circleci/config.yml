@@ -30,7 +30,7 @@ jobs:
 
       - run:
           name: Build
-          command: node build-libs.js --prod
+          command: node build-libs.js --env=prod
 
     #   - persist_to_workspace:
     #       root: ~/repo
