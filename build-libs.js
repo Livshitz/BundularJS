@@ -9,6 +9,8 @@ const argv = require("yargs").argv;
   libx.gulp.config.isProd = argv.env == "prod";
   libx.gulp.config.workdir = src;
 
+  console.log('libx.gulp.config.isProd:', libx.gulp.config.isProd);
+
   process
     .on("unhandledRejection", (reason, p) => {
       console.error(reason, "Unhandled Rejection at Promise", p);
@@ -127,7 +129,7 @@ const argv = require("yargs").argv;
         libx.gulp.middlewares.renameFunc(f => (f.extname = ".min.css"))
       ],
       shouldWatch
-    );
+    ); 
 
     await libx.gulp.copy(
       [dest + "/**/*.css"],
