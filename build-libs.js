@@ -132,9 +132,12 @@ const argv = require("yargs").argv;
     ); 
 
     await libx.gulp.copy(
-      [dest + "/**/*.css"],
+      [dest + "/styles/*.css"],
       dest + "/framework/",
-      () => [libx.gulp.middlewares.concat("bundle.styles.css")],
+      () => [
+        libx.gulp.middlewares.concat("bundle.styles.css"),
+        libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minifyLess()),
+      ],
       shouldWatch
     );
 
