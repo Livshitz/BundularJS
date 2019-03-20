@@ -165,6 +165,7 @@ let projconfig;
 	}
 
 	var clearLibs = async ()=> {
+		console.log('fuser:clearLibs: cleaning cache folder "lib-cache"')
 		await libx.gulp.delete('./lib-cache');
 	}
 
