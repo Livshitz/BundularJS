@@ -88,19 +88,10 @@ const argv = require("yargs").argv;
 
     var p6 = libx.gulp.copy(
       [
+        src + "/scripts/**/*.css",
         src + "/styles/**/*.less",
         "!" + src + "/styles/lib/**/*",
         "node_modules/angular-material/angular-material.scss"
-      ],
-      dest + "/styles/",
-      null,
-      false
-    );
-
-    var p6 = libx.gulp.copy(
-      [
-        src + "/scripts/lib/slick/slick.css",
-        src + "/scripts/lib/slick/slick-theme.css"
       ],
       dest + "/styles/",
       null,
