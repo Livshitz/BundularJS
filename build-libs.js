@@ -9,7 +9,7 @@ const argv = require("yargs").argv;
 	libx.gulp.config.isProd = argv.env == "prod";
 	libx.gulp.config.workdir = src;
 
-	console.log("libx.gulp.config.isProd:", libx.gulp.config.isProd);
+	libx.log.verbose("libx.gulp.config.isProd:", libx.gulp.config.isProd);
 
 	process
 		.on("unhandledRejection", (reason, p) => {
