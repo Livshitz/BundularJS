@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/bundlephobia/min/libx.fuser.svg?style=plastic)](https://www.npmjs.com/package/libx.fuser)
 [![npm](https://img.shields.io/github/languages/code-size/livshitz/libx.fuser.svg?label=source%20code%20size)](https://www.github.com/livshitz/libx.fuser)
 
-> libx.fuser is framework, bundler and a static site generator all combined. Based on [libx.js](https://github.com/livshitz/libx.js).
+> libx.fuser is a framework, bundler and a static-site generator, all combined. Based on [libx.js](https://github.com/livshitz/libx.js).
 
 
 ## Features: 
@@ -31,6 +31,10 @@ The tools used, mainly Firebase & Netlify, allows the maintenance seamless and e
 
 ## Usage
 > `npm install --save libx.fuser` 
+
+Grab latest fuser.js:
+>  `curl -O -L https://raw.githubusercontent.com/Livshitz/libx.fuser/master/tools/fuser.js`
+
 <!-- [TBD]: Add instructions to fork and clone a scaffold project -->
 
 <!-- 
