@@ -52,6 +52,11 @@ libx.gulp = require('libx.js/node/gulp');
 				'node ./node_modules/libx.fuser/index.js --api-deploy', 
 			], true);
 		},
+		update: async ()=> {
+			var res = await libx.gulp.exec([
+				'curl -O -L https://raw.githubusercontent.com/Livshitz/libx.fuser/master/tools/fuser.js', 
+			], true);
+		},
 	};
 
 	if (libx.node.args.apiDeploy) {
@@ -62,6 +67,8 @@ libx.gulp = require('libx.js/node/gulp');
 		modes.devenv();
 	} else if (libx.node.args.linkLibx) {
 		modes.linkLibx();
+	} else if (libx.node.args.update) {
+		modes.update();
 	} else {
 		modes.devenv();
 	}
