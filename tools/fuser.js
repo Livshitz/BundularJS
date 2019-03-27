@@ -63,7 +63,7 @@ libx.gulp = require('libx.js/node/gulp');
 		modes.api_deploy();
 	} else if (libx.node.args.build) {
 		modes.build();
-	} else if (libx.node.args.dev) {
+	} else if (libx.node.args.dev) { 
 		modes.devenv();
 	} else if (libx.node.args.linkLibx) {
 		modes.linkLibx();
