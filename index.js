@@ -1,16 +1,21 @@
 const libx = require('libx.js');
 libx.gulp = require("libx.js/node/gulp");
 const path = require('path');
+const fs = require('fs');
 const argv = require('yargs').argv;
 
 let projconfig;
 
 (async ()=>{ /* init */
+	var api = {};
+
 	var dir = process.cwd(); //__dirname
 	var src = dir + '/src';
 	var dest = dir + '/build';
 	
 	var secretsFile = src + '/project-secrets.json';
+	var secretsFileOpen = src + '/project-secrets-open.json';
+	var secretsFileEmpty = src + '/project-secrets-Empty.json';
 	var secretsKey = (argv.secret || process.env.FUSER_SECRET_KEY || "123").toString();
 	// libx.log.info('!!! Secret key is: ', secretsKey);
 
@@ -22,25 +27,46 @@ let projconfig;
 
 	/*
 	// await libx.gulp.copy(['./test.js', 'libx.gulp.js'], dest, libx.gulp.middlewares.minify );
-	*/ 
+	*/
+	
+	
+	api.secretsLock = ()=>{
+		if (!fs.existsSync(secretsFileOpen) && fs.existsSync(secretsFile)) {
+			libx.log.w('SecretsLock: did not find decrypted file but has encrypted one, will decrypt...');
+			libx.node.decryptFile(secretsFile, secretsKey, secretsFileOpen);
+		}
+
+		libx.node.encryptFile(secretsFileOpen, secretsKey, secretsFile);
+		libx.log.info('Secrets file locked successfully');
+	}
+	api.secretsUnlock = ()=>{
+		try {
+			libx.node.decryptFile(secretsFile, secretsKey, secretsFileOpen);
+			libx.log.info('Secrets file unlocked successfully');
+		} catch(ex) { libx.log.warning('Could not decrypt secrets', ex); }
+	}
+	api.secretsEmpty = ()=>{
+		libx.node.decryptFile(secretsFile, secretsKey, secretsFileOpen);
+		var content = fs.readFileSync(secretsFileOpen);
+		var obj = JSON.parse(content);
+		var empty = libx.makeEmpty(obj);
+		fs.writeFileSync(secretsFileEmpty, libx.jsonify(empty));
+
+		libx.log.info('Empty secrets file was wrote successfully ', secretsFileEmpty);
+	}
 
 	if (argv.secretsLock) {
-		try {
-			libx.node.decryptFile(src + '/project-secrets.json', secretsKey);
-			throw "Cannot encrypt file, it's not decrypted!";
-		} catch(ex) { 
-			// Only encrypt when can't decrypt the file (meaning it's unencrypted, otherwise we'll encrypt encrypted file)
-			libx.node.encryptFile(secretsFile, secretsKey);
-			libx.log.info('Secrets file locked successfully');
-		}
+		api.secretsLock()
 		return;
 	}
 	
 	if (argv.secretsUnlock) {
-		try {
-			libx.node.decryptFile(src + '/project-secrets.json', secretsKey);
-			libx.log.info('Secrets file unlocked successfully');
-		} catch(ex) { libx.log.warning('Could not decrypt secrets', ex); }
+		api.secretsUnlock();
+		return;
+	}
+
+	if (argv.secretsEmpty) {
+		api.secretsEmpty();
 		return;
 	}
 	
@@ -77,6 +103,9 @@ let projconfig;
 	// build:
 	var build = async () => {
 		libx.log.info('build: starting');
+
+		api.secretsLock();
+		api.secretsEmpty();
 
 		if (shouldServe && shouldServeLibs && !libx.gulp.config.isProd) {
 			var res = libx.gulp.exec([
@@ -158,10 +187,14 @@ let projconfig;
 			});
 		}
 
+		await copyProjectConfigToApi(shouldWatch);
+		
+		libx.log.info('build: done');
+	}
+
+	var copyProjectConfigToApi = async (shouldWatch)=> {
 		await libx.gulp.copy([src + '/project.json'], './api/build', null, shouldWatch);
 		await libx.gulp.copy([src + '/project-secrets.json'], './api/build', null, shouldWatch);
-
-		libx.log.info('build: done');
 	}
 
 	var clearLibs = async ()=> {
@@ -169,10 +202,9 @@ let projconfig;
 		await libx.gulp.delete('./lib-cache');
 	}
 
-	var api = {};
 	api.runlocal = async () => {
-		await libx.gulp.copy([src + '/project.json'], './api/build', null, true);
-		await libx.gulp.copy([src + '/project-secrets.json'], './api/build', null, true);
+		await copyProjectConfigToApi(true);
+
 		var res = await libx.gulp.exec([
 			'cd api', 
 			'source $(brew --prefix nvm)/nvm.sh; nvm use v8.12.0',
