@@ -20,16 +20,16 @@ let projconfig;
 	// libx.log.info('!!! Secret key is: ', secretsKey);
 
 	// var fs = require('fs');
-	if (libx.gulp.getArgs().noDelete == null) { 
-		libx.log.info('test: cleaning build folder: ', dest);
-		await libx.gulp.delete(dest);
-	}
-
+	
 	/*
 	// await libx.gulp.copy(['./test.js', 'libx.gulp.js'], dest, libx.gulp.middlewares.minify );
 	*/
 	
-	
+	var copyProjectConfigToApi = async (shouldWatch)=> {
+		await libx.gulp.copy([src + '/project.json'], './api/build', null, shouldWatch);
+		await libx.gulp.copy([src + '/project-secrets.json'], './api/build', null, shouldWatch);
+	}
+
 	api.secretsLock = ()=>{
 		if (!fs.existsSync(secretsFileOpen) && fs.existsSync(secretsFile)) {
 			libx.log.w('SecretsLock: did not find decrypted file but has encrypted one, will decrypt...');
@@ -54,7 +54,7 @@ let projconfig;
 
 		libx.log.info('Empty secrets file was wrote successfully ', secretsFileEmpty);
 	}
-
+	
 	if (argv.secretsLock) {
 		api.secretsLock()
 		return;
@@ -69,11 +69,27 @@ let projconfig;
 		api.secretsEmpty();
 		return;
 	}
+
+	
 	
 	projconfig = libx.getProjectConfig(src, secretsKey);
 	libx.gulp.projconfig = projconfig;
 
 	var projName = projconfig.projectName.replace('-','_')
+
+	api.deployRules = async () => {
+		await copyProjectConfigToApi(false);
+
+		var res = await libx.gulp.exec([
+			'cd api', 
+			'firebase use {0} --token {1}'.format(projconfig.firebaseProjectName, projconfig.private.firebaseToken), 
+			'firebase deploy --only database --token {0}'.format(projconfig.private.firebaseToken),
+		], true);
+	}
+	if (argv.deployRules) {
+		api.deployRules();
+		return;
+	}
 
 	libx.gulp.config.workdir = src;
 	libx.gulp.config.devServer.port = projconfig.private.debugPort;
@@ -103,6 +119,11 @@ let projconfig;
 	// build:
 	var build = async () => {
 		libx.log.info('build: starting');
+
+		if (libx.gulp.getArgs().noDelete == null) { 
+			libx.log.info('test: cleaning build folder: ', dest);
+			await libx.gulp.delete(dest);
+		}
 
 		api.secretsLock();
 		api.secretsEmpty();
@@ -192,11 +213,6 @@ let projconfig;
 		libx.log.info('build: done');
 	}
 
-	var copyProjectConfigToApi = async (shouldWatch)=> {
-		await libx.gulp.copy([src + '/project.json'], './api/build', null, shouldWatch);
-		await libx.gulp.copy([src + '/project-secrets.json'], './api/build', null, shouldWatch);
-	}
-
 	var clearLibs = async ()=> {
 		console.log('fuser:clearLibs: cleaning cache folder "lib-cache"')
 		await libx.gulp.delete('./lib-cache');
@@ -212,6 +228,7 @@ let projconfig;
 			'firebase serve -p {0} --only functions --token {1}'.format(projconfig.private.firebaseFunctionsPort, projconfig.private.firebaseToken)
 		], true);
 	}
+
 	api.deploy = async () => {
 		try {
 			await libx.gulp.copy([src + '/project.json'], './api/build');
@@ -232,7 +249,7 @@ let projconfig;
 	if (argv.build) await build();
 	if (argv.apiRun) api.runlocal();
 	if (argv.apiDeploy) api.deploy();
-
+	
 	if (shouldServe) {
 		libx.log.info('test: serving...');
 		libx.gulp.serve(dest, null, [dest + '/**/*.*']);

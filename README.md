@@ -1,10 +1,11 @@
 # Libx.fuser 
 
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](/LICENSE)
 [![npm](https://img.shields.io/npm/v/libx.fuser.svg?maxAge=1000)](https://www.npmjs.com/package/libx.fuser)
 [![CircleCI](https://circleci.com/gh/Livshitz/libx.fuser/tree/master.svg?style=shield)](https://circleci.com/gh/Livshitz/libx.fuser)
-[![npm](https://img.shields.io/bundlephobia/minzip/libx.fuser.svg?style=plastic)](https://www.npmjs.com/package/libx.fuser)
-[![npm](https://img.shields.io/bundlephobia/min/libx.fuser.svg?style=plastic)](https://www.npmjs.com/package/libx.fuser)
 [![npm](https://img.shields.io/github/languages/code-size/livshitz/libx.fuser.svg?label=source%20code%20size)](https://www.github.com/livshitz/libx.fuser)
+<!-- [![npm](https://img.shields.io/bundlephobia/minzip/libx.fuser.svg?style=plastic)](https://www.npmjs.com/package/libx.fuser) -->
+<!-- [![npm](https://img.shields.io/bundlephobia/min/libx.fuser.svg?style=plastic)](https://www.npmjs.com/package/libx.fuser) -->
 
 > libx.fuser is a framework, bundler and a static-site generator, all combined. Based on [libx.js](https://github.com/livshitz/libx.js).
 

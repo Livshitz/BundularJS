@@ -36,6 +36,6 @@
         "angular-sanitize": "^1.7.6",
         "firebase": "^5.9.0",
         "jquery": "^3.3.1",
-        "libx.js": "^0.0.63"
+        "libx.js": "^0.0.64"
     }
 }

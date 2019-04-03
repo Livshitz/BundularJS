@@ -1,4 +1,5 @@
-// Please note:
+// Libx.fuser
+
 // This file is intended to be copied into a project that has installed libx.fuser.
 // Run this to install libx.fuser: `npm install --save libx.fuser`
 // Grab latest fuser.js: `curl -O -L https://raw.githubusercontent.com/Livshitz/libx.fuser/master/tools/fuser.js`
