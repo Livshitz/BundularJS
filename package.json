@@ -1,6 +1,6 @@
 {
-    "name": "libx.fuser",
-    "version": "0.0.59",
+    "name": "bundularjs",
+    "version": "0.1.0",
     "description": "",
     "main": "index.js",
     "directories": {
@@ -11,14 +11,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Livshitz/libx.fuser.git"
+        "url": "git+https://github.com/Livshitz/bundularjs.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/Livshitz/libx.fuser/issues"
+        "url": "https://github.com/Livshitz/bundularjs/issues"
     },
-    "homepage": "https://github.com/Livshitz/libx.fuser#readme",
+    "homepage": "https://github.com/Livshitz/bundularjs#readme",
     "files": [
         "dist/**",
         "src/**",

@@ -1,8 +1,8 @@
-// Libx.fuser
+// BundularJS
 
-// This file is intended to be copied into a project that has installed libx.fuser.
-// Run this to install libx.fuser: `npm install --save libx.fuser`
-// Grab latest fuser.js: `curl -O -L https://raw.githubusercontent.com/Livshitz/libx.fuser/master/tools/fuser.js`
+// This file is intended to be copied into a project that has installed bundularjs.
+// Run this to install bundularjs: `npm install --save bundularjs`
+// Grab latest fuser.js: `curl -O -L https://raw.githubusercontent.com/Livshitz/bundularjs/master/tools/fuser.js`
 
 const libx = require('libx.js');
 libx.node = require('libx.js/node');
@@ -18,20 +18,20 @@ libx.gulp = require('libx.js/node/gulp');
 		devenv: async ()=> {
 			libx.log.v('starting devenv');
 
-			// libx.js files changed -> libx.fuser pulls those files and builds the `dist` folder ->
+			// libx.js files changed -> bundularjs pulls those files and builds the `dist` folder ->
 			// clear libs cache -> rebuild index.pug
 			libx.gulp.watchSimple(['./node_modules/libx.js/**/*.js', '!./node_modules/libx.js/node_modules/**'], (ev, p)=>{
 				if (ev.type != 'changed') return;
 				libx.log.v('change! ', ev, p)
-				// libx.gulp.exec(['node ./node_modules/libx.fuser/build-libs.js'], true);
+				// libx.gulp.exec(['node ./node_modules/bundularjs/build-libs.js'], true);
 				libx.throttle(()=>{
 					libx.gulp.triggerChange('browserify/libx.js');
 				}, 100)();
 			});
 
 			var res = await libx.gulp.exec([
-				'node ./node_modules/libx.fuser/build-libs.js',
-				`node ./node_modules/libx.fuser/index.js --build --serve --watch --clearLibs --secret=${secret} ${libx.node.args.api ? ' --api-run' : ''} ${libx.node.args.env ? '--env='+libx.node.args.env:'' }`, 
+				'node ./node_modules/bundularjs/build-libs.js',
+				`node ./node_modules/bundularjs/index.js --build --serve --watch --clearLibs --secret=${secret} ${libx.node.args.api ? ' --api-run' : ''} ${libx.node.args.env ? '--env='+libx.node.args.env:'' }`, 
 			], true);
 
 			
@@ -39,23 +39,23 @@ libx.gulp = require('libx.js/node/gulp');
 		},
 		build: async ()=> {
 			await libx.gulp.exec([
-				'node ./node_modules/libx.fuser/index.js --build --clearLibs --env=prod --secret=' + secret,
+				'node ./node_modules/bundularjs/index.js --build --clearLibs --env=prod --secret=' + secret,
 			], true);
 		},
 		linkLibx: async ()=> {
 			var res = await libx.gulp.exec([
-				'npm link libx.fuser', 
+				'npm link bundularjs', 
 				'npm link libx.js', 
 			], true);
 		},
 		api_deploy: async ()=> {
 			var res = await libx.gulp.exec([
-				'node ./node_modules/libx.fuser/index.js --api-deploy', 
+				'node ./node_modules/bundularjs/index.js --api-deploy', 
 			], true);
 		},
 		update: async ()=> {
 			var res = await libx.gulp.exec([
-				'curl -O -L https://raw.githubusercontent.com/Livshitz/libx.fuser/master/tools/fuser.js', 
+				'curl -O -L https://raw.githubusercontent.com/Livshitz/bundularjs/master/tools/fuser.js', 
 			], true);
 		},
 	};

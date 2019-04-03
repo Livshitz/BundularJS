@@ -174,9 +174,9 @@ let projconfig;
 		
 		await Promise.all([p1, p2, p3, p4 , p5, p6]);
 
-		libx.gulp.copy('./node_modules/libx.fuser/dist/fonts/**/*', dest + '/resources/fonts/lib/', null, false, { debug: false });
+		libx.gulp.copy('./node_modules/bundularjs/dist/fonts/**/*', dest + '/resources/fonts/lib/', null, false, { debug: false });
 		libx.gulp.copy('./node_modules/ng-inline-edit/dist/ng-inline-edit.js', dest + '/resources/scripts/lib/', null, false);
-		// libx.gulp.copy('./node_modules/libx.fuser/src/scripts/lib/angular-inview.js', dest + '/resources/scripts/lib/', null, false);
+		// libx.gulp.copy('./node_modules/bundularjs/src/scripts/lib/angular-inview.js', dest + '/resources/scripts/lib/', null, false);
 		
 		var pIndex = libx.gulp.copy([src + '/index.pug'], dest, ()=>[
 			libx.gulp.middlewares.pug(),
@@ -201,7 +201,7 @@ let projconfig;
 		}
 
 		if (shouldWatch) {
-			libx.gulp.watchSimple([process.cwd() + '/./node_modules/libx.fuser/dist/**/*.js'], (ev, p)=>{
+			libx.gulp.watchSimple([process.cwd() + '/./node_modules/bundularjs/dist/**/*.js'], (ev, p)=>{
 				if (ev.type != 'changed') return;
 				libx.gulp.delete('./lib-cache');
 				libx.gulp.triggerChange(src + '/index.pug');
