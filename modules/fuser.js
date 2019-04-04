@@ -6,7 +6,7 @@ const argv = require('yargs').argv;
 
 let projconfig;
 
-(async ()=>{ /* init */
+(async ()=>{ /* init */ 
 	var api = {};
 
 	var dir = process.cwd(); //__dirname
