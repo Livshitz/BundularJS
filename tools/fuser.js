@@ -30,7 +30,7 @@ libx.gulp = require('libx.js/node/gulp');
 			});
 
 			var res = await libx.gulp.exec([
-				'node ./node_modules/bundularjs/build-libs.js',
+				// 'node ./node_modules/bundularjs/build-libs.js',
 				`node ./node_modules/bundularjs/modules/fuser.js --build --serve --watch --clearLibs --secret=${secret} ${libx.node.args.api ? ' --api-run' : ''} ${libx.node.args.env ? '--env='+libx.node.args.env:'' }`, 
 			], true);
 

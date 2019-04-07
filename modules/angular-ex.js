@@ -28,18 +28,18 @@ module.exports = (function(){
 			});
 		};
 	
-		window.ngInjector = function () {
+		mod.ngInjector = function () {
 			var ret = mod.injector || angular.element(mod.rootElm || document.body.parentNode).injector(); 
 			//angular.injector(['ng']); //.invoke(($window)=> libx.log.v($window.origin));
 			// angular.element('body').injector();
 			if (ret == null) throw 'angular is not ready yet'; // ret = angular.injector(['ng']);
 			return ret;
 		};
-		window.ngGet = (getModule) => window.ngInjector().get(getModule);
-		window.ngScopeInline = function() { return angular.element('[ng-controller="inlineController"]').last().scope() };
-		window.scope = window.ngScopeInline();
-		mod.do = (func, reqModules)=> window.ngInjector(reqModules).invoke(func);
-		mod.get = (instanceName) => window.ngGet(instanceName);
+		mod.ngGet = (getModule) => mod.ngInjector().get(getModule);
+		mod.ngScopeInline = function() { return angular.element('[ng-controller="inlineController"]').last().scope() };
+		mod.scope = mod.ngScopeInline();
+		mod.do = (func, reqModules)=> mod.ngInjector(reqModules).invoke(func);
+		mod.get = (instanceName) => mod.ngGet(instanceName);
 		// mod.onReady2 = (func) => angular.element('body').ready(func);
 	
 		mod.config(()=>{
@@ -77,7 +77,7 @@ module.exports = (function(){
 			};
 	
 			$rootScope.safeApply = function (scope) {
-				scope = scope || $scope;
+				scope = scope || window.$scope || mod.$scope;
 	
 				var phase = (this.$root || $rootScope).$$phase;
 				if (phase != '$apply' && phase != '$digest') {
@@ -101,11 +101,11 @@ module.exports = (function(){
 				}
 				catch(ex) {
 				}
-				window.ngScope = angular.element('[ng-view]').scope();
+				mod.ngScope = angular.element('[ng-view]').scope();
 	
 				// mod.autoNameInputs();
 	
-				window.$scope = window.ngScopeInline();
+				mod.$scope = window.$scope = mod.ngScopeInline();
 			});
 	
 			mod.ngRefresh = function(elmQuery) {
@@ -158,8 +158,8 @@ module.exports = (function(){
 
 		//#region Controllers
 		mod.controller('inlineControllerBase', function ($scope, $rootScope) {
-			window.$scope = ngScopeInline();
-			window.$rootScope = $rootScope;
+			mod.$scope = mod.ngScopeInline();
+			mod.$rootScope = $rootScope;
 			$scope.app = app;
 			$scope.root = $rootScope;
 		});
@@ -319,9 +319,9 @@ module.exports = (function(){
 		}
 	
 		mod.navigate = (url, params)=> { 
-			var l = url || ngGet('$location').path();
-			var ret = ngGet('$location').path(l, params); 
-			ngGet('$rootScope').safeApply(); 
+			var l = url || mod.ngGet('$location').path();
+			var ret = mod.ngGet('$location').path(l, params); 
+			mod.ngGet('$rootScope').safeApply(); 
 			return ret;
 		};
 	
@@ -360,7 +360,7 @@ module.exports = (function(){
 			// Appending dialog to document.body to cover sidenav in docs app
 			var p = libx.newPromise();
 			var options = options || {};
-			var $mdDialog = ngGet('$mdDialog');
+			var $mdDialog = mod.ngGet('$mdDialog');
 			var confirm = $mdDialog.prompt()
 				.title(title)
 				.textContent(options.content)
@@ -409,14 +409,14 @@ module.exports = (function(){
 					var _locals = Object.assign({}, locals); // make shallow copy, by value
 					jQuery.extend(_locals, extraLocals);
 	
-					if (showCloseButton) ngGet('$rootScope').showFloatingBackButton = true;
+					if (showCloseButton) mod.ngGet('$rootScope').showFloatingBackButton = true;
 					
 					// Hack to solve the not-appearing dialog
 					setTimeout(function() { $(window).resize(); }, 100);
 					setTimeout(function() { $(window).resize(); }, 500);
 					setTimeout(function() { $(window).resize(); }, 2000);
 	
-					ngGet('$mdDialog').show({
+					mod.ngGet('$mdDialog').show({
 						controller: dialogName,
 						templateUrl: dialogTemplate,
 						locals: _locals,
@@ -424,26 +424,26 @@ module.exports = (function(){
 						escapeToClose: true
 					}).then(function (answer) {
 						libx.log.verbose('Dialog:' + dialogName + ': dialog successfull');
-						ngGet('$rootScope').showFloatingBackButton = false;
+						mod.ngGet('$rootScope').showFloatingBackButton = false;
 					}, function () {
 						if ($scope.locals != null && $scope.locals.onClose != null) $scope.locals.onClose();
 						libx.log.verbose('Dialog:' + dialogName + ': dialog cancelled');
-						ngGet('$rootScope').showFloatingBackButton = false;
+						mod.ngGet('$rootScope').showFloatingBackButton = false;
 					});
 				},
 				hide: function hide() {
-					ngGet('$mdDialog').hide();
-					ngGet('$rootScope').showFloatingBackButton = false;
+					mod.ngGet('$mdDialog').hide();
+					mod.ngGet('$rootScope').showFloatingBackButton = false;
 				}
 			};
 		};
 	
 		mod.hideDialog = function () {
-			ngGet('$mdDialog').hide();
+			mod.ngGet('$mdDialog').hide();
 		};
 	
 		mod.reload = function() {
-			ngGet('$window').location.reload();
+			mod.ngGet('$window').location.reload();
 		}
 	
 		mod.autoNameInputs = function(){
@@ -466,7 +466,7 @@ module.exports = (function(){
 			}
 	
 			delay = delay || 3000;
-			var $mdToast = ngGet('$mdToast');
+			var $mdToast = mod.ngGet('$mdToast');
 			$mdToast.show({
 				template: '<md-toast class="md-toast ' + type +'"><i class="md-icons">' + icon + "</i>&nbsp;" + msg + '</md-toast>',
 				hideDelay: delay,
@@ -553,7 +553,7 @@ module.exports = (function(){
 							$window.onresize = function (event) {
 								_.each(mod.screenModes, function (value, key) {
 									if ($window.matchMedia(value).matches) {
-										ngGet('$parse')($attr['is' + key])($scope);
+										mod.ngGet('$parse')($attr['is' + key])($scope);
 									} else {}
 								});
 							};
