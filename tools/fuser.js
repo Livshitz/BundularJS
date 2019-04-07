@@ -31,7 +31,7 @@ libx.gulp = require('libx.js/node/gulp');
 
 			var res = await libx.gulp.exec([
 				'node ./node_modules/bundularjs/build-libs.js',
-				`node ./node_modules/bundularjs/index.js --build --serve --watch --clearLibs --secret=${secret} ${libx.node.args.api ? ' --api-run' : ''} ${libx.node.args.env ? '--env='+libx.node.args.env:'' }`, 
+				`node ./node_modules/bundularjs/modules/fuser.js --build --serve --watch --clearLibs --secret=${secret} ${libx.node.args.api ? ' --api-run' : ''} ${libx.node.args.env ? '--env='+libx.node.args.env:'' }`, 
 			], true);
 
 			
@@ -39,7 +39,7 @@ libx.gulp = require('libx.js/node/gulp');
 		},
 		build: async ()=> {
 			await libx.gulp.exec([
-				'node ./node_modules/bundularjs/index.js --build --clearLibs --env=prod --secret=' + secret,
+				'node ./node_modules/bundularjs/modules/fuser.js --build --clearLibs --env=prod --secret=' + secret,
 			], true);
 		},
 		linkLibx: async ()=> {
@@ -50,7 +50,7 @@ libx.gulp = require('libx.js/node/gulp');
 		},
 		api_deploy: async ()=> {
 			var res = await libx.gulp.exec([
-				'node ./node_modules/bundularjs/index.js --api-deploy', 
+				'node ./node_modules/bundularjs/modules/fuser.js --api-deploy', 
 			], true);
 		},
 		update: async ()=> {
