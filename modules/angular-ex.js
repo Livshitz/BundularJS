@@ -4,12 +4,21 @@ module.exports = (function(){
 	// const libx = require('../bundles/browser.essentials');
 
 	mod.init = ()=> {
-		mod = angular.module('bundular', ['ngResource', 'ngRoute']);
+		mod.templates = angular.module('templates', []);
+
+		var exModules = ['ngAnimate', 'ngMaterial', 'ngCookies', 'ngResource', 'ngRoute', 'templates'];
+		var deps = _.concat(['ngResource', 'ngRoute'], exModules);
+
+		mod = angular.module('bundular', deps);
 	
+		mod.handlers = {};
+
 		mod.factory('utils', ($rootScope, $window, $resource, $q, $timeout, $location, $http) => {
 			var service = {};
 			return mod;
 		});
+
+		require('./angular-overrides')(mod);
 	
 		//#region Basics
 		mod.bootstrap = (appModuleName, rootElm)=> {
@@ -36,7 +45,10 @@ module.exports = (function(){
 			return ret;
 		};
 		mod.ngGet = (getModule) => mod.ngInjector().get(getModule);
-		mod.ngScopeInline = function() { return angular.element('[ng-controller="inlineController"]').last().scope() };
+		mod.ngScopeInline = function() { 
+			// return angular.element('[ng-view]').scope();
+			return angular.element('[ng-controller="inlineController"]').last().scope() 
+		};
 		mod.scope = mod.ngScopeInline();
 		mod.do = (func, reqModules)=> mod.ngInjector(reqModules).invoke(func);
 		mod.get = (instanceName) => mod.ngGet(instanceName);
@@ -63,7 +75,11 @@ module.exports = (function(){
 			mod.$rootScope = $rootScope;
 	
 			mod.broadcast = (eventName) => $rootScope.$broadcast(eventName);
-			mod.on = (eventName, func) => $rootScope.$on(eventName, func);
+			mod.on = (eventName, func, avoidDestroyExisting) => {
+				if (mod.handlers[eventName] != null && !avoidDestroyExisting) mod.handlers[eventName]();
+				return mod.handlers[eventName] = 
+					$rootScope.$on(eventName, func);
+			}
 			mod.onReady = (func) => { 
 				if (!mod.ngReady) mod.on('ng-ready', func);
 				else func.call(); //mod.do(func);
@@ -85,7 +101,7 @@ module.exports = (function(){
 				}
 			};
 	
-			$rootScope.$on('$routeChangeSuccess', function ($event) {
+			mod.on('$routeChangeSuccess', function ($event) {
 				libx.log.verbose('$routeChangeSuccess');
 				$rootScope.hasBack = function () {
 					return mod.history.length > 1 && mod.history[mod.history.length - 1] != '/'; // $location.$$path != '/' &&
@@ -94,19 +110,24 @@ module.exports = (function(){
 				mod.history.push($location.$$path);
 			});
 	
-			$rootScope.$on('$viewContentLoaded', function () {
+			mod.on('$destroy', ()=>{
+				libx.log.verbose('$destroy', $location.$$path);
+			});
+
+			mod.on('$viewContentLoaded', function () {
 				libx.log.verbose('$viewContentLoaded', $location.$$path);
 				try{
 					if ($window.ga != null) $window.ga('send', 'pageview', { page: $location.path() });
 				}
 				catch(ex) {
 				}
-				mod.ngScope = angular.element('[ng-view]').scope();
-	
+				
 				// mod.autoNameInputs();
-	
+				
 				mod.$scope = window.$scope = mod.ngScopeInline();
-			});
+				if (mod.$scope != null)
+					mod.$rootScope = window.$rootScope = mod.$scope.$root;
+			}, true);
 	
 			mod.ngRefresh = function(elmQuery) {
 				if (libx.isNull(elmQuery)) elmQuery = "body";
