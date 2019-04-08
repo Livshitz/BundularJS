@@ -76,7 +76,7 @@ module.exports = (function(){
 	
 			mod.broadcast = (eventName) => $rootScope.$broadcast(eventName);
 			mod.on = (eventName, func, avoidDuplicates) => {
-				if (mod.handlers[eventName] != null && avoidDuplicates) mod.handlers[eventName]();
+				if (mod.handlers[eventName] != null && avoidDuplicates == true) mod.handlers[eventName]();
 				return mod.handlers[eventName] = 
 					$rootScope.$on(eventName, func);
 			}
@@ -125,8 +125,7 @@ module.exports = (function(){
 				// mod.autoNameInputs();
 				
 				mod.$scope = window.$scope = mod.ngScopeInline();
-				if (mod.$scope != null)
-					mod.$rootScope = window.$rootScope = mod.$scope.$root;
+				mod.$rootScope = window.$rootScope = mod.$scope.$root;
 			});
 	
 			mod.ngRefresh = function(elmQuery) {
