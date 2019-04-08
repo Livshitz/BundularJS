@@ -75,8 +75,8 @@ module.exports = (function(){
 			mod.$rootScope = $rootScope;
 	
 			mod.broadcast = (eventName) => $rootScope.$broadcast(eventName);
-			mod.on = (eventName, func, avoidDestroyExisting) => {
-				if (mod.handlers[eventName] != null && !avoidDestroyExisting) mod.handlers[eventName]();
+			mod.on = (eventName, func, avoidDuplicates) => {
+				if (mod.handlers[eventName] != null && avoidDuplicates) mod.handlers[eventName]();
 				return mod.handlers[eventName] = 
 					$rootScope.$on(eventName, func);
 			}
@@ -127,7 +127,7 @@ module.exports = (function(){
 				mod.$scope = window.$scope = mod.ngScopeInline();
 				if (mod.$scope != null)
 					mod.$rootScope = window.$rootScope = mod.$scope.$root;
-			}, true);
+			});
 	
 			mod.ngRefresh = function(elmQuery) {
 				if (libx.isNull(elmQuery)) elmQuery = "body";
