@@ -137,13 +137,13 @@ let projconfig;
 
 		// await libx.gulp.copy(src + '/views/views-templates.js', dest + '/views/', null, shouldWatch);
 
-		var p1 = libx.gulp.copy([src + '/**/*.js', `!${src}/views/*`], dest + '/resources/', ()=>[
+		var p1 = libx.gulp.copy([src + '/resources/**/*.js', `!${src}/views/*`], dest + '/resources/', ()=>[
 			// libx.gulp.middlewares.ifProd(libx.gulp.middlewares.babelify()),
 			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minify()),
 			// libx.gulp.middlewares.renameFunc(f=>f.basename='xx')
 		], shouldWatch); 
 
-		var p2 = libx.gulp.copy([src + '/**/*.less'], dest + '/resources/', ()=>[
+		var p2 = libx.gulp.copy([src + '/resources/**/*.less'], dest + '/resources/', ()=>[
 			libx.gulp.middlewares.less(),
 			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minifyLess()),
 			libx.gulp.middlewares.renameFunc(f=>f.extname = ".min.css"),
@@ -155,15 +155,20 @@ let projconfig;
 			// libx.gulp.middlewares.triggerChange(src + '/index.pug'),
 		], shouldWatch, { useSourceDir: true });
 
-		var p4 = libx.gulp.copy(src + '/components/**/*.pug', dest + '/resources/components', ()=>[
+		var p4 = libx.gulp.copy(src + '/components/**/*.pug', dest + '/components', ()=>[
 			libx.gulp.middlewares.pug(),
-			libx.gulp.middlewares.write(dest + '/resources/components'),
+			libx.gulp.middlewares.write(dest + '/components'),
 			libx.gulp.middlewares.template('components'),
 		], shouldWatch);
+		var p5 = libx.gulp.copy([src + '/components/**/*.js'], dest + '/components/', ()=>[
+			// libx.gulp.middlewares.ifProd(libx.gulp.middlewares.babelify()),
+			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minify()),
+			// libx.gulp.middlewares.renameFunc(f=>f.basename='xx')
+		], shouldWatch); 
 
-		var p5 = libx.gulp.copy(src + '/imgs/**/*', dest + '/resources/imgs/', null, shouldWatch);
+		var p6 = libx.gulp.copy(src + '/resources/imgs/**/*', dest + '/resources/imgs/', null, shouldWatch);
 
-		var p6 = libx.gulp.copy('./browserify/**/*.js', dest + '/resources/scripts/', ()=>[
+		var p7 = libx.gulp.copy('./browserify/**/*.js', dest + '/resources/scripts/', ()=>[
 			libx.gulp.middlewares.browserify({ bare: false }),
 			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minify()),
 			// libx.gulp.middlewares.concat('browserified.js'),
@@ -172,7 +177,7 @@ let projconfig;
 			// libx.gulp.middlewares.liveReload(),
 		], shouldWatch);
 		
-		await Promise.all([p1, p2, p3, p4 , p5, p6]);
+		await Promise.all([p1, p2, p3, p4 , p5, p6, p7]);
 
 		libx.gulp.copy('./node_modules/bundularjs/dist/fonts/**/*', dest + '/resources/fonts/lib/', null, false, { debug: false });
 		libx.gulp.copy('./node_modules/ng-inline-edit/dist/ng-inline-edit.js', dest + '/resources/scripts/lib/', null, false);
