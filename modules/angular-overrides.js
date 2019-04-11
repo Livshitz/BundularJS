@@ -1,6 +1,6 @@
+module.exports = (function(bundular){
 
-module.exports = (function(mod){
-	mod.config(($provide)=>{
+	bundular.config(($provide)=>{
 		$provide.decorator('$templateRequest', ($http, $templateCache, $q, $delegate)=>{
 			// Return a function that will be
 			// called when a template needs to be fetched
@@ -33,6 +33,5 @@ module.exports = (function(mod){
 			};
 		});
 	});
-	
 
 });

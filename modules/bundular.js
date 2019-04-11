@@ -1,72 +1,77 @@
 module.exports = (function(){
-	var mod = {};
+	let mod;
 	var libx = __libx;
 	// const libx = require('../bundles/browser.essentials');
 
-	mod.init = ()=> {
-		mod.templates = angular.module('templates', []);
 
-		var exModules = ['ngAnimate', 'ngMaterial', 'ngCookies', 'ngResource', 'ngRoute', 'templates'];
-		var deps = _.concat(['ngResource', 'ngRoute'], exModules);
-
+	init = ()=> {
+		var templates = angular.module('templates', []);
+		var deps = ['ngAnimate', 'ngMaterial', 'ngCookies', 'ngResource', 'ngRoute', 'templates'];
 		mod = angular.module('bundular', deps);
-	
+		
+		mod._angular = angular;
+		mod.extend = mod._angular.extend;
 		mod.handlers = {};
+
+		mod.modules = new libx.DependencyInjector();
+		mod.routes = mod.modules.register('routes', require('./routes')(mod));
+		mod.modules.register('angular-overrides', require('./angular-overrides')(mod));
 
 		mod.factory('utils', ($rootScope, $window, $resource, $q, $timeout, $location, $http) => {
 			var service = {};
 			return mod;
 		});
 
-		require('./angular-overrides')(mod);
-	
 		//#region Basics
 		mod.bootstrap = (appModuleName, rootElm)=> {
-			mod.rootElm = rootElm;
+			mod.rootElm = rootElm || document.body.parentNode;
 			if (window._libx_angular_boot) throw "angular was already bootstrapped!";
 			window._libx_angular_boot = true;
 
 			libx.log.verbose('bundular.bootstrap');
 			var loader = ()=> {
 				libx.log.verbose('bundular.bootstrap: loader');
-				mod.injector = angular.bootstrap(rootElm || document.body.parentNode, [appModuleName || 'myApp']);
+				mod.injector = mod._angular.bootstrap(mod.rootElm , [appModuleName || 'myApp']);
 			}
 			loader();
-			angular.element(window).on('load', ()=> {
+			mod._angular.element(window).on('load', ()=> {
 				libx.log.verbose('bundular.bootstrap: load');
 			});
 		};
+
+		mod.element = (query)=> {
+			return mod._angular.element(query || mod.rootElm || document.body.parentNode);
+		}
 	
 		mod.ngInjector = function () {
-			var ret = mod.injector || angular.element(mod.rootElm || document.body.parentNode).injector(); 
-			//angular.injector(['ng']); //.invoke(($window)=> libx.log.v($window.origin));
-			// angular.element('body').injector();
-			if (ret == null) throw 'angular is not ready yet'; // ret = angular.injector(['ng']);
+			var ret = mod.injector || mod.element().injector(); 
+			//mod._angular.injector(['ng']); //.invoke(($window)=> libx.log.v($window.origin));
+			// mod._angular.element('body').injector();
+			if (ret == null) throw 'angular is not ready yet'; // ret = mod._angular.injector(['ng']);
 			return ret;
 		};
 		mod.ngGet = (getModule) => mod.ngInjector().get(getModule);
 		mod.ngScopeInline = function() { 
-			// return angular.element('[ng-view]').scope();
-			return angular.element('[ng-controller="inlineController"]').last().scope() 
+			// return mod._angular.element('[ng-view]').scope();
+			return mod.element('[ng-controller="inlineController"]').last().scope() 
 		};
 		mod.scope = mod.ngScopeInline();
 		mod.do = (func, reqModules)=> mod.ngInjector(reqModules).invoke(func);
 		mod.get = (instanceName) => mod.ngGet(instanceName);
-		// mod.onReady2 = (func) => angular.element('body').ready(func);
+		// mod.onReady2 = (func) => mod._angular.element('body').ready(func);
 	
 		mod.config(()=>{
 			libx.log.verbose('bundular: config');
 		});
 
 		// Self init stuff:
-		mod.run(()=>{
-			mod.history = [];
-			// mod.fixRouteSensitivity();
-			// mod.initScreenSizeDirectives();
-		});
-	
 		mod.run(($rootScope, $window, $resource, $q, $timeout, $location, $http)=>{
 			libx.log.verbose('bundular: run');
+
+			mod.history = [];
+
+			// mod.fixRouteSensitivity();
+			// mod.initScreenSizeDirectives();
 
 			$rootScope.libx = {};
 			$rootScope.libx.browser = libx.browser;
@@ -111,6 +116,7 @@ module.exports = (function(){
 			});
 	
 			mod.on('$destroy', ()=>{
+				debugger
 				libx.log.verbose('$destroy', $location.$$path);
 			});
 
@@ -130,10 +136,11 @@ module.exports = (function(){
 	
 			mod.ngRefresh = function(elmQuery) {
 				if (libx.isNull(elmQuery)) elmQuery = "body";
-				var scope = angular.element(elmQuery).scope();
-				var compile = angular.element(elmQuery).injector().get('$compile');
+				var elm = mod.element(elmQuery);
+				var scope = elm.scope();
+				var compile = elm.injector().get('$compile');
 			
-				compile($(elmQuery).contents())(scope);
+				compile(elm.contents())(scope);
 				scope.$apply();
 			}
 
@@ -178,10 +185,11 @@ module.exports = (function(){
 
 		//#region Controllers
 		mod.controller('inlineControllerBase', function ($scope, $rootScope) {
-			mod.$scope = mod.ngScopeInline();
-			mod.$rootScope = $rootScope;
-			$scope.app = app;
-			$scope.root = $rootScope;
+			libx.log.d('inlineControllerBase')
+			// mod.$scope = mod.ngScopeInline();
+			// mod.$rootScope = $rootScope;
+			// $scope.app = app;
+			// $scope.root = $rootScope;
 		});
 		//#endregion
 	
@@ -490,7 +498,7 @@ module.exports = (function(){
 			$mdToast.show({
 				template: '<md-toast class="md-toast ' + type +'"><i class="md-icons">' + icon + "</i>&nbsp;" + msg + '</md-toast>',
 				hideDelay: delay,
-				paren: angular.element('.layout-content'),
+				paren: mod._angular.element('.layout-content'),
 				position: pos
 				// textContent: ''
 			});
@@ -654,7 +662,7 @@ module.exports = (function(){
 				restrict: 'A',
 				link: function ($scope, $element, attrs) {
 					if (attrs != null && attrs['autofocus'] != null) {
-						var trigetElm = angular.element(attrs['autofocus'])
+						var trigetElm = mod._angular.element(attrs['autofocus'])
 						var isSelectAll = _.has(attrs, 'autofocusSelect');
 
 						trigetElm.bind('click', function() {
@@ -917,7 +925,7 @@ module.exports = (function(){
 							var newRoot = document.createElement("div");
 							newRoot.innerHTML = html;
 							// bootstrap module
-							angular.bootstrap(newRoot, [attrs["ngSubApp"]]);
+							mod._angular.bootstrap(newRoot, [attrs["ngSubApp"]]);
 							// add it to page
 							element.append(newRoot);
 						});
@@ -930,11 +938,11 @@ module.exports = (function(){
 	};
 
 	if (typeof angular == "undefined") libx.log.debug('bundular: Angular is not defined, skipping Angular libx setup...');
-	else mod.init();
+	else init();
 
 	return mod;
 })();
 
 (()=>{ // Dependency Injector auto module registration
-	__libx.di.register('angular-ex', module.exports);
+	__libx.di.register('bundular', module.exports);
 })();
