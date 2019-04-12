@@ -4,7 +4,7 @@ const libx = require('libx.js');
 // libx.crypto = require('libx.js/modules/crypto');
 
 (async ()=>{
-	var res = await libx.gulp.exec([
+	var res = await libx.bundler.exec([
 		'cd ../base-publish', 
 		'http-server --cors'
 	], true);
@@ -38,7 +38,7 @@ var onFileReady = (elm, attr, file, ext, fname) => {
 		case '.woff': type = 'fonts'; break;
 	}
 	var p = `/resources/${type}/lib/`;
-	libx.gulp.copy([file], dest + p)
+	libx.bundler.copy([file], dest + p)
 
 	if (attr != null) $(elm).attr(attr, p + fname);
 }
