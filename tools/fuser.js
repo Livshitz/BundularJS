@@ -6,9 +6,9 @@
 
 const libx = require('libx.js');
 libx.node = require('libx.js/node');
-libx.gulp = require('libx.js/node/gulp');
+libx.bundler = require('libx.js/node/bundler');
 
-// libx.log.v('projconfig: ', libx.gulp.projconfig, libx.shuffle([1,2,3,4]));
+// libx.log.v('projconfig: ', libx.bundler.projconfig, libx.shuffle([1,2,3,4]));
 // libx.log.v(libx.node.args.env);
 
 (async ()=>{
@@ -20,41 +20,42 @@ libx.gulp = require('libx.js/node/gulp');
 
 			// libx.js files changed -> bundularjs pulls those files and builds the `dist` folder ->
 			// clear libs cache -> rebuild index.pug
-			libx.gulp.watchSimple(['./node_modules/libx.js/**/*.js', '!./node_modules/libx.js/node_modules/**'], (ev, p)=>{
+			libx.bundler.watchSimple(['./node_modules/libx.js/**/*.js', '!./node_modules/libx.js/node_modules/**'], (ev, p)=>{
 				if (ev.type != 'changed') return;
 				libx.log.v('change! ', ev, p)
-				// libx.gulp.exec(['node ./node_modules/bundularjs/build-libs.js'], true);
+				// libx.bundler.exec(['node ./node_modules/bundularjs/build-libs.js'], true);
 				libx.throttle(()=>{
-					libx.gulp.triggerChange('browserify/libx.js');
+					libx.bundler.triggerChange('browserify/libx.js');
 				}, 100)();
 			});
 
-			var res = await libx.gulp.exec([
+			var res = await libx.bundler.exec([
 				// 'node ./node_modules/bundularjs/build-libs.js',
-				`node ./node_modules/bundularjs/modules/fuser.js --build --serve --watch --clearLibs --secret=${secret} ${libx.node.args.api ? ' --api-run' : ''} ${libx.node.args.env ? '--env='+libx.node.args.env:'' }`, 
+				`node ./node_modules/bundularjs/modules/fuser.js --build --serve --watch --clearLibs --secret=${secret} ${libx.node.args.api ? ' --api-run' : ''} ${libx.node.args.env ? '--env='+libx.node.args.env:'' } 
+				${libx.node.args.bare ? '--bare' : '' }`, 
 			], true);
 
 			
 			// libx.log.v('res: ', res);
 		},
 		build: async ()=> {
-			await libx.gulp.exec([
+			await libx.bundler.exec([
 				'node ./node_modules/bundularjs/modules/fuser.js --build --clearLibs --env=prod --secret=' + secret,
 			], true);
 		},
 		linkLibx: async ()=> {
-			var res = await libx.gulp.exec([
+			var res = await libx.bundler.exec([
 				'npm link bundularjs', 
 				'npm link libx.js', 
 			], true);
 		},
 		api_deploy: async ()=> {
-			var res = await libx.gulp.exec([
+			var res = await libx.bundler.exec([
 				'node ./node_modules/bundularjs/modules/fuser.js --api-deploy', 
 			], true);
 		},
 		update: async ()=> {
-			var res = await libx.gulp.exec([
+			var res = await libx.bundler.exec([
 				'curl -O -L https://raw.githubusercontent.com/Livshitz/bundularjs/master/tools/fuser.js', 
 			], true);
 		},

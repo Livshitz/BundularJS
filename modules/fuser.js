@@ -1,5 +1,6 @@
 const libx = require('libx.js');
-libx.gulp = require("libx.js/node/gulp");
+libx.bundler = require("libx.js/node/bundler");
+libx.node = require("libx.js/node");
 const path = require('path');
 const fs = require('fs');
 const argv = require('yargs').argv;
@@ -22,12 +23,12 @@ let projconfig;
 	// var fs = require('fs');
 	
 	/*
-	// await libx.gulp.copy(['./test.js', 'libx.gulp.js'], dest, libx.gulp.middlewares.minify );
+	// await libx.bundler.copy(['./test.js', 'libx.bundler.js'], dest, libx.bundler.middlewares.minify );
 	*/
 	
 	var copyProjectConfigToApi = async (shouldWatch)=> {
-		await libx.gulp.copy([src + '/project.json'], './api/build', null, shouldWatch);
-		await libx.gulp.copy([src + '/project-secrets.json'], './api/build', null, shouldWatch);
+		await libx.bundler.copy([src + '/project.json'], './api/build', null, shouldWatch);
+		await libx.bundler.copy([src + '/project-secrets.json'], './api/build', null, shouldWatch);
 	}
 
 	api.secretsLock = ()=>{
@@ -72,15 +73,15 @@ let projconfig;
 
 	
 	
-	projconfig = libx.getProjectConfig(src, secretsKey);
-	libx.gulp.projconfig = projconfig;
+	projconfig = libx.node.getProjectConfig(src, secretsKey);
+	libx.bundler.projconfig = projconfig;
 
 	var projName = projconfig.projectName.replace('-','_')
 
 	api.deployRules = async () => {
 		await copyProjectConfigToApi(false);
 
-		var res = await libx.gulp.exec([
+		var res = await libx.bundler.exec([
 			'cd api', 
 			'firebase use {0} --token {1}'.format(projconfig.firebaseProjectName, projconfig.private.firebaseToken), 
 			'firebase deploy --only database --token {0}'.format(projconfig.private.firebaseToken),
@@ -91,18 +92,22 @@ let projconfig;
 		return;
 	}
 
-	libx.gulp.config.workdir = src;
-	libx.gulp.config.devServer.port = projconfig.private.debugPort;
-	libx.gulp.config.devServer.host = projconfig.private.host;
-	libx.gulp.config.devServer.livePort = projconfig.private.livereloadPort;
-	libx.gulp.config.devServer.useHttps = projconfig.private.debugIsSecure;
-	// libx.gulp.config.isProd = projconfig.;
+	libx.bundler.config.workdir = src;
+	libx.bundler.config.devServer.port = projconfig.private.debugPort;
+	libx.bundler.config.devServer.host = projconfig.private.host;
+	libx.bundler.config.devServer.livePort = projconfig.private.livereloadPort;
+	libx.bundler.config.devServer.useHttps = projconfig.private.debugIsSecure;
+	// libx.bundler.config.isProd = projconfig.;
 
 	if (argv.develop) {
 		argv.watch = true;
 		argv.serve = true;
 		argv.build = true;
 		argv.clearLibs = true;
+	}
+
+	if (argv.bare) {
+		console.log('-- Using browserify.bare', argv.bare);
 	}
 
 	var shouldWatch = argv.watch || false;
@@ -120,96 +125,96 @@ let projconfig;
 	var build = async () => {
 		libx.log.info('build: starting');
 
-		if (libx.gulp.getArgs().noDelete == null) { 
+		if (libx.bundler.getArgs().noDelete == null) { 
 			libx.log.info('test: cleaning build folder: ', dest);
-			await libx.gulp.delete(dest);
+			await libx.bundler.delete(dest);
 		}
 
 		api.secretsLock();
 		api.secretsEmpty();
 
-		if (shouldServe && shouldServeLibs && !libx.gulp.config.isProd) {
-			var res = libx.gulp.exec([
+		if (shouldServe && shouldServeLibs && !libx.bundler.config.isProd) {
+			var res = libx.bundler.exec([
 				'cd ../base-publish', 
 				'http-server --cors --gzip -p 3888'
 			], true);
 		}
 
-		// await libx.gulp.copy(src + '/views/views-templates.js', dest + '/views/', null, shouldWatch);
+		// await libx.bundler.copy(src + '/views/views-templates.js', dest + '/views/', null, shouldWatch);
 
-		var p1 = libx.gulp.copy([src + '/resources/**/*.js', `!${src}/views/*`], dest + '/resources/', ()=>[
-			// libx.gulp.middlewares.ifProd(libx.gulp.middlewares.babelify()),
-			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minify()),
-			// libx.gulp.middlewares.renameFunc(f=>f.basename='xx')
+		var p1 = libx.bundler.copy([src + '/resources/**/*.js', `!${src}/views/*`], dest + '/resources/', ()=>[
+			// libx.bundler.middlewares.ifProd(libx.bundler.middlewares.babelify()),
+			libx.bundler.middlewares.ifProd(libx.bundler.middlewares.minify()),
+			// libx.bundler.middlewares.renameFunc(f=>f.basename='xx')
 		], shouldWatch); 
 
-		var p2 = libx.gulp.copy([src + '/resources/**/*.less'], dest + '/resources/', ()=>[
-			libx.gulp.middlewares.less(),
-			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minifyLess()),
-			libx.gulp.middlewares.renameFunc(f=>f.extname = ".min.css"),
+		var p2 = libx.bundler.copy([src + '/resources/**/*.less'], dest + '/resources/', ()=>[
+			libx.bundler.middlewares.less(),
+			libx.bundler.middlewares.ifProd(libx.bundler.middlewares.minifyLess()),
+			libx.bundler.middlewares.renameFunc(f=>f.extname = ".min.css"),
 		], shouldWatch, { useSourceDir: true });
 
-		var p3 = libx.gulp.copy(src + '/views/**/*.pug', dest + '/views', ()=>[
-			libx.gulp.middlewares.pug(),
-			libx.gulp.middlewares.template('views'),
-			// libx.gulp.middlewares.triggerChange(src + '/index.pug'),
+		var p3 = libx.bundler.copy(src + '/views/**/*.pug', dest + '/views', ()=>[
+			libx.bundler.middlewares.pug(),
+			libx.bundler.middlewares.template('views'),
+			// libx.bundler.middlewares.triggerChange(src + '/index.pug'),
 		], shouldWatch, { useSourceDir: true });
 
-		var p4 = libx.gulp.copy(src + '/components/**/*.pug', dest + '/components', ()=>[
-			libx.gulp.middlewares.pug(),
-			libx.gulp.middlewares.write(dest + '/components'),
-			libx.gulp.middlewares.template('components'),
+		var p4 = libx.bundler.copy(src + '/components/**/*.pug', dest + '/components', ()=>[
+			libx.bundler.middlewares.pug(),
+			libx.bundler.middlewares.write(dest + '/components'),
+			libx.bundler.middlewares.template('components'),
 		], shouldWatch);
-		var p5 = libx.gulp.copy([src + '/components/**/*.js'], dest + '/components/', ()=>[
-			// libx.gulp.middlewares.ifProd(libx.gulp.middlewares.babelify()),
-			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minify()),
-			// libx.gulp.middlewares.renameFunc(f=>f.basename='xx')
+		var p5 = libx.bundler.copy([src + '/components/**/*.js'], dest + '/components/', ()=>[
+			// libx.bundler.middlewares.ifProd(libx.bundler.middlewares.babelify()),
+			libx.bundler.middlewares.ifProd(libx.bundler.middlewares.minify()),
+			// libx.bundler.middlewares.renameFunc(f=>f.basename='xx')
 		], shouldWatch); 
 
-		var p6 = libx.gulp.copy(src + '/resources/imgs/**/*', dest + '/resources/imgs/', null, shouldWatch);
+		var p6 = libx.bundler.copy(src + '/resources/imgs/**/*', dest + '/resources/imgs/', null, shouldWatch);
 
-		var p7 = libx.gulp.copy('./browserify/**/*.js', dest + '/resources/scripts/', ()=>[
-			libx.gulp.middlewares.browserify({ bare: false }),
-			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.minify()),
-			// libx.gulp.middlewares.concat('browserified.js'),
-			// libx.gulp.middlewares.rename('browserified.js'),
-			// libx.gulp.triggerChange(src + '/index.pug'),
-			// libx.gulp.middlewares.liveReload(),
+		var p7 = libx.bundler.copy('./browserify/**/*.js', dest + '/resources/scripts/', ()=>[
+			libx.bundler.middlewares.browserify({ bare: argv.bare || false }),
+			libx.bundler.middlewares.ifProd(libx.bundler.middlewares.minify()),
+			// libx.bundler.middlewares.concat('browserified.js'),
+			// libx.bundler.middlewares.rename('browserified.js'),
+			// libx.bundler.triggerChange(src + '/index.pug'),
+			// libx.bundler.middlewares.liveReload(),
 		], shouldWatch);
 		
 		await Promise.all([p1, p2, p3, p4 , p5, p6, p7]);
 
-		libx.gulp.copy('./node_modules/bundularjs/dist/fonts/**/*', dest + '/resources/fonts/lib/', null, false, { debug: false });
-		libx.gulp.copy('./node_modules/ng-inline-edit/dist/ng-inline-edit.js', dest + '/resources/scripts/lib/', null, false);
-		// libx.gulp.copy('./node_modules/bundularjs/src/scripts/lib/angular-inview.js', dest + '/resources/scripts/lib/', null, false);
+		libx.bundler.copy('./node_modules/bundularjs/dist/fonts/**/*', dest + '/resources/fonts/lib/', null, false, { debug: false });
+		libx.bundler.copy('./node_modules/ng-inline-edit/dist/ng-inline-edit.js', dest + '/resources/scripts/lib/', null, false);
+		// libx.bundler.copy('./node_modules/bundularjs/src/scripts/lib/angular-inview.js', dest + '/resources/scripts/lib/', null, false);
 		
-		var pIndex = libx.gulp.copy([src + '/index.pug'], dest, ()=>[
-			libx.gulp.middlewares.pug(),
-			libx.gulp.middlewares.localize('./', dest), //, true),
-			libx.gulp.middlewares.ifProd(libx.gulp.middlewares.usemin('build/')),
+		var pIndex = libx.bundler.copy([src + '/index.pug'], dest, ()=>[
+			libx.bundler.middlewares.pug(),
+			libx.bundler.middlewares.localize('./', dest), //, true),
+			libx.bundler.middlewares.ifProd(libx.bundler.middlewares.usemin('build/')),
 		], shouldWatch, { base: src });
 		
 		await pIndex;
 
 		if (shouldWatch) {
-			libx.gulp.watchSimple([src + '/_content.pug'], (ev, p)=>{
+			libx.bundler.watchSimple([src + '/_content.pug'], (ev, p)=>{
 				if (ev.type != 'changed') return;
-				libx.gulp.triggerChange(src + '/index.pug');
+				libx.bundler.triggerChange(src + '/index.pug');
 			});
 		}
 
-		if (shouldWatch && libx.gulp.config.isProd) {
-			libx.gulp.watchSimple([dest + '/**/*'], (ev, p)=>{
+		if (shouldWatch && libx.bundler.config.isProd) {
+			libx.bundler.watchSimple([dest + '/**/*'], (ev, p)=>{
 				if (ev.type != 'changed') return;
-				libx.gulp.triggerChange(src + '/index.pug');
+				libx.bundler.triggerChange(src + '/index.pug');
 			});
 		}
 
 		if (shouldWatch) {
-			libx.gulp.watchSimple([process.cwd() + '/./node_modules/bundularjs/dist/**/*.js'], (ev, p)=>{
+			libx.bundler.watchSimple([process.cwd() + '/./node_modules/bundularjs/dist/**/*.js'], (ev, p)=>{
 				if (ev.type != 'changed') return;
-				libx.gulp.delete('./lib-cache');
-				libx.gulp.triggerChange(src + '/index.pug');
+				libx.bundler.delete('./lib-cache');
+				libx.bundler.triggerChange(src + '/index.pug');
 			});
 		}
 
@@ -220,13 +225,13 @@ let projconfig;
 
 	var clearLibs = async ()=> {
 		console.log('fuser:clearLibs: cleaning cache folder "lib-cache"')
-		await libx.gulp.delete('./lib-cache');
+		await libx.bundler.delete('./lib-cache');
 	}
 
 	api.runlocal = async () => {
 		await copyProjectConfigToApi(true);
 
-		var res = await libx.gulp.exec([
+		var res = await libx.bundler.exec([
 			'cd api', 
 			'source $(brew --prefix nvm)/nvm.sh; nvm use v8.12.0',
 			'firebase use {0} --token {1}'.format(projconfig.firebaseProjectName, projconfig.private.firebaseToken), 
@@ -236,10 +241,10 @@ let projconfig;
 
 	api.deploy = async () => {
 		try {
-			await libx.gulp.copy([src + '/project.json'], './api/build');
-			await libx.gulp.copy([src + '/project-secrets.json'], './api/build');
+			await libx.bundler.copy([src + '/project.json'], './api/build');
+			await libx.bundler.copy([src + '/project-secrets.json'], './api/build');
 
-			var res = await libx.gulp.exec([
+			var res = await libx.bundler.exec([
 				'cd api', 
 				// 'npm install', 
 				'firebase functions:config:set {0}.fuser_secret_key="{1}"'.format(projName, secretsKey),
@@ -257,7 +262,7 @@ let projconfig;
 	
 	if (shouldServe) {
 		libx.log.info('test: serving...');
-		libx.gulp.serve(dest, null, [dest + '/**/*.*']);
+		libx.bundler.serve(dest, null, [dest + '/**/*.*']);
 	}
 
 	libx.log.info('done')
