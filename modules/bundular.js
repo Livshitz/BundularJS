@@ -3,7 +3,6 @@ module.exports = (function(){
 	var libx = __libx;
 	// const libx = require('../bundles/browser.essentials');
 
-
 	init = ()=> {
 		var templates = angular.module('templates', []);
 		var deps = ['ngAnimate', 'ngMaterial', 'ngCookies', 'ngResource', 'ngRoute', 'templates'];
