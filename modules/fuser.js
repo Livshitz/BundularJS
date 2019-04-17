@@ -116,8 +116,9 @@ let projconfig;
 
 	process.on('uncaughtException', function (err) {
 		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		console.error(err.stack, err);
-		console.log("Node NOT Exiting...", err.stack, err);
+		// console.error(err.stack, err);
+		// libx.log.e("uncaughtException: ", err.stack, err)
+		console.log("uncaughtException: ", err.stack || err);//, err);
 		console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	});
 

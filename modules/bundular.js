@@ -17,6 +17,10 @@ module.exports = (function(){
 		mod.routes = mod.modules.register('routes', require('./routes')(mod));
 		mod.modules.register('angular-overrides', require('./angular-overrides')(mod));
 
+		libx.di.require((EventsStore)=>{
+			mod.events = new EventsStore();
+		});
+
 		mod.factory('utils', ($rootScope, $window, $resource, $q, $timeout, $location, $http) => {
 			var service = {};
 			return mod;
@@ -36,6 +40,7 @@ module.exports = (function(){
 			loader();
 			mod._angular.element(window).on('load', ()=> {
 				libx.log.verbose('bundular.bootstrap: load');
+				mod.events.broadcast('page', { step: 'loaded' });
 			});
 		};
 
@@ -88,10 +93,12 @@ module.exports = (function(){
 			mod.onReady = (func) => { 
 				if (!mod.ngReady) mod.on('ng-ready', func);
 				else func.call(); //mod.do(func);
+
 			}
-	
+			
 			mod.broadcast("ng-ready");
 			mod.ngReady = true;
+			mod.events.broadcast('page', { step: 'ng-ready' });
 			
 			$rootScope.trustSrc = function (src) {
 				return $sce.trustAsResourceUrl(src);
@@ -113,6 +120,7 @@ module.exports = (function(){
 				};
 	
 				mod.history.push($location.$$path);
+				mod.events.broadcast('page', { step: 'route-change' });
 			});
 	
 			mod.on('$destroy', ()=>{
@@ -132,6 +140,8 @@ module.exports = (function(){
 				
 				mod.$scope = window.$scope = mod.ngScopeInline();
 				mod.$rootScope = window.$rootScope = mod.$scope.$root;
+
+				mod.events.broadcast('page', { step: 'view-loaded' });
 			});
 	
 			mod.ngRefresh = function(elmQuery) {
@@ -190,6 +200,8 @@ module.exports = (function(){
 			// mod.$rootScope = $rootScope;
 			// $scope.app = app;
 			// $scope.root = $rootScope;
+
+			mod.events.broadcast('page', { step: 'inline-view-loaded' });
 		});
 		//#endregion
 	
