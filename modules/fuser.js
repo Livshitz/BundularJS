@@ -25,6 +25,8 @@ let projconfig;
 	/*
 	// await libx.bundler.copy(['./test.js', 'libx.bundler.js'], dest, libx.bundler.middlewares.minify );
 	*/
+
+	var tsProject = libx.bundler.ts.createProject(dir + '/tsconfig.json');
 	
 	var copyProjectConfigToApi = async (shouldWatch)=> {
 		await libx.bundler.copy([src + '/project.json'], './api/build', null, shouldWatch);
@@ -182,7 +184,30 @@ let projconfig;
 			// libx.bundler.triggerChange(src + '/index.pug'),
 			// libx.bundler.middlewares.liveReload(),
 		], shouldWatch);
-		
+
+		// var p8 = libx.bundler.copy('./browserify/**/*.ts', dest + '/resources/scripts/', ()=>[
+		// 	libx.bundler.middlewares.sourcemaps.init(), 
+		// 	libx.bundler.middlewares.ts({ 
+		// 		// outFile: 'tsc.js'
+		// 	}),
+		// 	libx.bundler.middlewares.sourcemaps.write('.', 
+		// 		{ includeContent: false }), 
+		// 	// libx.bundler.middlewares.tsify({ 
+		// 	// 	sourcemaps: true, 
+		// 	// 	sourcemapDest: dest + '/resources/scripts/',  
+		// 	// }),
+		// 	// libx.bundler.middlewares.browserify({ sourcemaps: true, sourcemapDest: dest + '/resources/scripts/'  }),
+		// 	// libx.bundler.middlewares.renameFunc(f=>f.extname='.js'),
+		// 	// libx.bundler.middlewares.triggerChange('./browserify/libx.js'),
+		// ], shouldWatch);
+
+		if (shouldWatch) {
+			libx.bundler.watchSimple(['./browserify/**/*.ts'], (ev, p)=>{
+				if (ev.type != 'changed') return;
+				libx.bundler.triggerChange('./browserify/libx.js');
+			});
+		}
+
 		await Promise.all([p1, p2, p3, p4 , p5, p6, p7]);
 
 		libx.bundler.copy('./node_modules/bundularjs/dist/fonts/**/*', dest + '/resources/fonts/lib/', null, false, { debug: false });
