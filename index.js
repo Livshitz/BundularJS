@@ -5,6 +5,6 @@ module.exports = (function(){
 	return libx.di.register('bundular', require('./modules/bundular'));; 
 })();
 
-(()=>{ // Dependency Injector auto module registration
+(()=>{ // Dependency Injector auto module registration 
 	__libx.di.register('bundular', module.exports);
 })();
