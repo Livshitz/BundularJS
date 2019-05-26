@@ -73,8 +73,6 @@ let projconfig;
 		return;
 	}
 
-	
-	
 	projconfig = libx.node.getProjectConfig(src, secretsKey);
 	libx.bundler.projconfig = projconfig;
 
