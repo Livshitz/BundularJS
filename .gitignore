@@ -15,3 +15,5 @@ dist
 psm.sh
 
 packages/*
+
+.npmrc
