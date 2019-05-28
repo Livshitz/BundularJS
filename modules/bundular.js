@@ -31,14 +31,14 @@ module.exports = (function(){
 			if (window._libx_angular_boot) throw "angular was already bootstrapped!";
 			window._libx_angular_boot = true;
 
-			libx.log.verbose('bundular.bootstrap');
+			libx.log.debug('bundular.bootstrap');
 			var loader = ()=> {
-				libx.log.verbose('bundular.bootstrap: loader');
+				libx.log.debug('bundular.bootstrap: loader');
 				mod.injector = mod._angular.bootstrap(mod.rootElm , [appModuleName || 'myApp']);
 			}
 			loader();
 			mod._angular.element(window).on('load', ()=> {
-				libx.log.verbose('bundular.bootstrap: load');
+				libx.log.debug('bundular.bootstrap: load');
 				mod.events.broadcast('page', { step: 'loaded' });
 			});
 		};
@@ -65,12 +65,12 @@ module.exports = (function(){
 		// mod.onReady2 = (func) => mod._angular.element('body').ready(func);
 	
 		mod.config(()=>{
-			libx.log.verbose('bundular: config');
+			libx.log.debug('bundular: config');
 		});
 
 		// Self init stuff:
 		mod.run(($rootScope, $window, $resource, $q, $timeout, $location, $http)=>{
-			libx.log.verbose('bundular: run');
+			libx.log.debug('bundular: run');
 
 			mod.history = [];
 
@@ -113,7 +113,7 @@ module.exports = (function(){
 			};
 	
 			mod.on('$routeChangeSuccess', function ($event) {
-				libx.log.verbose('$routeChangeSuccess');
+				libx.log.debug('$routeChangeSuccess');
 				$rootScope.hasBack = function () {
 					return mod.history.length > 1 && mod.history[mod.history.length - 1] != '/'; // $location.$$path != '/' &&
 				};
@@ -123,12 +123,11 @@ module.exports = (function(){
 			});
 	
 			mod.on('$destroy', ()=>{
-				debugger
 				libx.log.verbose('$destroy', $location.$$path);
 			});
 
 			mod.on('$viewContentLoaded', function () {
-				libx.log.verbose('$viewContentLoaded', $location.$$path);
+				libx.log.debug('$viewContentLoaded', $location.$$path);
 				try{
 					if ($window.ga != null) $window.ga('send', 'pageview', { page: $location.path() });
 				}
