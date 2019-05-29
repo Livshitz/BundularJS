@@ -17,6 +17,7 @@ api.options = {
 	src: dir + '/src',
 	dest: dir + '/build',
 	watch: libx.node.args.watch || false, 
+	watchOnlyChanges: libx.node.args.watchOnlyChanges || false, 
 	// serveLibs: libx.node.args.libs || false,
 	deployRules: libx.node.args.deployRules || false,
 	isDevelop: libx.node.args.develop || false,
@@ -32,6 +33,7 @@ var secrets = new Secrets(api.options.src);
 
 	if (api.options.develop) {
 		api.options.watch = true;
+		api.options.watchOnlyChanges = false;
 		api.options.serve = true;
 		api.options.build = true;
 		api.options.clearLibs = true;
@@ -90,6 +92,8 @@ var secrets = new Secrets(api.options.src);
 		libx.log.info('build: starting');
 
 		options = libx.extend({}, api.options, options);
+
+		libx.bundler.config.watchOnlyChanges = options.watchOnlyChanges;
 
 		if (options.noDelete != true) {
 			libx.log.info('test: cleaning build folder: ', options.dest);
