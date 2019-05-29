@@ -12,9 +12,10 @@ module.exports = (function(){
 		mod.extend = mod._angular.extend;
 		mod.handlers = {};
 
-		mod.modules = new libx.DependencyInjector();
-		mod.routes = mod.modules.register('routes', require('./routes')(mod));
-		mod.modules.register('angular-overrides', require('./angular-overrides')(mod));
+		mod.di = new libx.DependencyInjector();
+		mod.routes = mod.di.register('routes', require('./routes')(mod));
+		mod.perf = mod.di.register('perf', require('./perf')(mod));
+		mod.di.register('angular-overrides', require('./angular-overrides')(mod));
 
 		libx.di.require((EventsStore)=>{
 			mod.events = new EventsStore();
