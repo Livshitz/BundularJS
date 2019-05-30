@@ -73,6 +73,8 @@ var secrets = new Secrets(api.options.src);
 	libx.bundler.config.devServer.host = projconfig.private.host;
 	libx.bundler.config.devServer.livePort = projconfig.private.livereloadPort;
 	libx.bundler.config.devServer.useHttps = projconfig.private.debugIsSecure;
+	libx.bundler.config.devServer.reloadDebounceMS = projconfig.private.reloadDebounceMS;
+	libx.bundler.config.devServer.reloadGraceMS = projconfig.private.reloadGraceMS;
 	// libx.bundler.config.isProd = projconfig.;
 
 	if (api.options.bare) {

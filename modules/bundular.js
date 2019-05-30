@@ -63,6 +63,10 @@ module.exports = (function(){
 		mod.scope = mod.ngScopeInline();
 		mod.do = (func, reqModules)=> mod.ngInjector(reqModules).invoke(func);
 		mod.get = (instanceName) => mod.ngGet(instanceName);
+		mod.require = (func) => {
+			var modulesName = libx.getParamNames(func);
+			mod.do(func, modulesName);
+		}
 		// mod.onReady2 = (func) => mod._angular.element('body').ready(func);
 	
 		mod.config(()=>{
