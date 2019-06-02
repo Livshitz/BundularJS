@@ -43,13 +43,12 @@ module.exports = (function(bundular){
 		return ret;
 	}
 
-	mod.getStats = () => {
+	mod.getStats = (printToConsole) => {
 		var w = mod.countWatches();
 		var dc = mod.measureDigestCycle();
-		libx.log.v(`Performance stats: Watchers: ${w}, DigestCycle: ${dc}ms `);
+		if (printToConsole != false) libx.log.v(`Performance stats: Watchers: ${w}, DigestCycle: ${dc}ms `);
 		return { watches: w, digestCycleMS: dc };
 	}
-
 
 	return mod;
 });

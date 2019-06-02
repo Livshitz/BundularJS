@@ -17,6 +17,8 @@ module.exports = (function(){
 		mod.perf = mod.di.register('perf', require('./perf')(mod));
 		mod.di.register('angular-overrides', require('./angular-overrides')(mod));
 
+		mod.freeze = require('./freeze')(mod);
+
 		libx.di.require((EventsStore)=>{
 			mod.events = new EventsStore();
 		});
