@@ -6,7 +6,7 @@
 
 const libx = require('libx.js');
 libx.node = require('libx.js/node');
-libx.bundler = require('libx.js/node/bundler');
+libx.pax = require('pax.libx.js');
 
 // libx.log.v('projconfig: ', libx.bundler.projconfig, libx.shuffle([1,2,3,4]));
 // libx.log.v(libx.node.args.env);

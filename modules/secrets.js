@@ -1,5 +1,5 @@
 const libx = require('libx.js');
-libx.bundler = require("libx.js/node/bundler");
+libx.pax = require("pax.libx.js");
 libx.node = require("libx.js/node");
 const fs = require('fs');
 

@@ -66,5 +66,5 @@ module.exports = (function(bundular){
 		}
 	});
 
-return mod;
+	return mod;
 });
