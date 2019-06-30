@@ -7,6 +7,7 @@
         "lib": "lib"
     },
     "scripts": {
+        "build": "node build-libs.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -37,7 +38,7 @@
         "angular-sanitize": "^1.7.6",
         "firebase": "^5.9.2",
         "jquery": "^3.3.1",
-        "libx.js": "^0.2.2",
+        "libx.js": "^0.2.5",
         "pax.libx.js": "^0.1.2"
     }
 }

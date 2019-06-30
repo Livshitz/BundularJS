@@ -133,7 +133,7 @@ module.exports = (function(){
 				libx.log.verbose('$destroy', $location.$$path);
 			});
 
-			mod.on('$viewContentLoaded', function () {
+			mod.on('$viewContentLoaded', function (event, viewName, viewContent) {
 				libx.log.debug('$viewContentLoaded', $location.$$path);
 				try{
 					if ($window.ga != null) $window.ga('send', 'pageview', { page: $location.path() });

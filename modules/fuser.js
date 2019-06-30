@@ -125,6 +125,12 @@ var secrets = new Secrets(api.options.src);
 			libx.pax.middlewares.ifProd(libx.pax.middlewares.minifyLess()),
 			libx.pax.middlewares.renameFunc(f => f.extname = ".min.css"),
 		], options.watch, { useSourceDir: true });
+		
+		var p22 = libx.pax.copy([options.src + '/resources/**/*.scss'], options.dest + '/resources/', () => [
+			libx.pax.middlewares.sass(),
+			libx.pax.middlewares.ifProd(libx.pax.middlewares.minifyCss()),
+			libx.pax.middlewares.renameFunc(f => f.extname = ".min.css"),
+		], options.watch, { useSourceDir: true });
 
 		var p3 = libx.pax.copy(options.src + '/views/**/*.pug', options.dest + '/views', () => [
 			libx.pax.middlewares.pug(),
@@ -155,7 +161,7 @@ var secrets = new Secrets(api.options.src);
 			// libx.pax.middlewares.liveReload(),
 		], options.watch);
 
-		await Promise.all([p1, p2, p3, p4, p5, p6, p7]);
+		await Promise.all([p1, p2, p22, p3, p4, p5, p6, p7]);
 
 		libx.pax.copy('./node_modules/bundularjs/dist/fonts/**/*', options.dest + '/resources/fonts/lib/', null, false, { debug: false });
 		libx.pax.copy('./node_modules/ng-inline-edit/dist/ng-inline-edit.js', options.dest + '/resources/scripts/lib/', null, false);
