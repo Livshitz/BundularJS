@@ -133,13 +133,13 @@ var secrets = new Secrets(api.options.src);
 		], options.watch, { useSourceDir: true });
 
 		var p3 = libx.pax.copy(options.src + '/views/**/*.pug', options.dest + '/views', () => [
-			libx.pax.middlewares.pug(),
+			libx.pax.middlewares.pug(options.pugLocals),
 			libx.pax.middlewares.template('views'),
 			// libx.pax.middlewares.triggerChange(options.src + '/index.pug'),
 		], options.watch, { useSourceDir: true });
 
 		var p4 = libx.pax.copy(options.src + '/components/**/*.pug', options.dest + '/components', () => [
-			libx.pax.middlewares.pug(),
+			libx.pax.middlewares.pug(options.pugLocals),
 			libx.pax.middlewares.write(options.dest + '/components'),
 			libx.pax.middlewares.template('components'),
 		], options.watch);
@@ -168,7 +168,7 @@ var secrets = new Secrets(api.options.src);
 		// libx.pax.copy('./node_modules/bundularjs/src/scripts/lib/angular-inview.js', options.dest + '/resources/scripts/lib/', null, false);
 
 		var pIndex = libx.pax.copy([options.src + '/index.pug'], options.dest, () => [
-			libx.pax.middlewares.pug(),
+			libx.pax.middlewares.pug(options.pugLocals),
 			libx.pax.middlewares.localize('./', options.dest), //, true),
 			libx.pax.middlewares.ifProd(libx.pax.middlewares.usemin('build/')),
 		], options.watch, { base: options.src });
