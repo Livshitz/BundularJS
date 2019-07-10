@@ -151,15 +151,18 @@ var secrets = new Secrets(api.options.src);
 
 		var p6 = libx.pax.copy(options.src + '/resources/imgs/**/*', options.dest + '/resources/imgs/', null, options.watch);
 
-		var p7 = libx.pax.copy(dir + '/' + projconfig.compiledFolder + '/' + (projconfig.compiledMainEntry || '**/*.js'), options.dest + '/resources/scripts/', () => [
-			// libx.pax.middlewares.tsify({ sourcemapDest: options.dest + '/resources/scripts/' }),
-			libx.pax.middlewares.browserify(options.browserify),
-			libx.pax.middlewares.ifProd(libx.pax.middlewares.minify()),
-			// libx.pax.middlewares.concat('browserified.js'),
-			// libx.pax.middlewares.rename('browserified.js'),
-			// libx.pax.triggerChange(options.src + '/index.pug'),
-			// libx.pax.middlewares.liveReload(),
-		], options.watch);
+		var p7 = null;
+		if (options.skipCompiled != true) {
+			p7 = libx.pax.copy(dir + '/' + projconfig.compiledFolder + '/' + (projconfig.compiledMainEntry || '**/*.js'), options.dest + '/resources/scripts/', () => [
+				// libx.pax.middlewares.tsify({ sourcemapDest: options.dest + '/resources/scripts/' }),
+				libx.pax.middlewares.browserify(options.browserify),
+				libx.pax.middlewares.ifProd(libx.pax.middlewares.minify()),
+				// libx.pax.middlewares.concat('browserified.js'),
+				// libx.pax.middlewares.rename('browserified.js'),
+				// libx.pax.triggerChange(options.src + '/index.pug'),
+				// libx.pax.middlewares.liveReload(),
+			], options.watch);
+		}
 
 		await Promise.all([p1, p2, p22, p3, p4, p5, p6, p7]);
 
