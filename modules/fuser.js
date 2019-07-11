@@ -153,7 +153,7 @@ var secrets = new Secrets(api.options.src);
 
 		var p7 = null;
 		if (options.skipCompiled != true) {
-			p7 = libx.pax.copy(dir + '/' + projconfig.compiledFolder + '/' + (projconfig.compiledMainEntry || '**/*.js'), options.dest + '/resources/scripts/', () => [
+			p7 = libx.pax.copy(dir + '/' + projconfig.compiledFolder + '/' + (projconfig.compiledMainEntry || '**/*.js'), options.dest + '/resources/scripts/compiled', () => [
 				// libx.pax.middlewares.tsify({ sourcemapDest: options.dest + '/resources/scripts/' }),
 				libx.pax.middlewares.browserify(options.browserify),
 				libx.pax.middlewares.ifProd(libx.pax.middlewares.minify()),
