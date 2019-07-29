@@ -638,6 +638,12 @@ module.exports = (function(){
 				return input;
 			};
 		});
+
+		mod.filter('reverse', function() {
+			return function(items) {
+				return items.slice().reverse();
+			};
+		});
 	
 		mod.directive('goClick', function ($location) {
 			return function (scope, element, attrs) {
