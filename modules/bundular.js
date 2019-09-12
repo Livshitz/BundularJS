@@ -42,7 +42,8 @@ module.exports = (function(){
 			loader();
 			mod._angular.element(window).on('load', ()=> {
 				libx.log.debug('bundular.bootstrap: load');
-				mod.events.broadcast('page', { step: 'loaded' });
+				if (mod.events)
+					mod.events.broadcast('page', { step: 'loaded' });
 			});
 		};
 
@@ -104,7 +105,8 @@ module.exports = (function(){
 			
 			mod.broadcast("ng-ready");
 			mod.ngReady = true;
-			mod.events.broadcast('page', { step: 'ng-ready' });
+			if (mod.events)
+				mod.events.broadcast('page', { step: 'ng-ready' });
 			
 			$rootScope.trustSrc = function (src) {
 				return $sce.trustAsResourceUrl(src);
@@ -126,7 +128,8 @@ module.exports = (function(){
 				};
 	
 				mod.history.push($location.$$path);
-				mod.events.broadcast('page', { step: 'route-change' });
+				if (mod.events)
+					mod.events.broadcast('page', { step: 'route-change' });
 			});
 	
 			mod.on('$destroy', ()=>{
@@ -146,7 +149,8 @@ module.exports = (function(){
 				mod.$scope = window.$scope = mod.ngScopeInline();
 				mod.$rootScope = window.$rootScope = mod.$scope.$root;
 
-				mod.events.broadcast('page', { step: 'view-loaded' });
+				if (mod.events)
+					mod.events.broadcast('page', { step: 'view-loaded' });
 			});
 	
 			mod.ngRefresh = function(elmQuery) {
@@ -206,7 +210,8 @@ module.exports = (function(){
 			// $scope.app = app;
 			// $scope.root = $rootScope;
 
-			mod.events.broadcast('page', { step: 'inline-view-loaded' });
+			if (mod.events)
+				mod.events.broadcast('page', { step: 'inline-view-loaded' });
 		});
 		//#endregion
 	
@@ -541,6 +546,7 @@ module.exports = (function(){
 		}
 	
 		mod.initScreenSizeDirectives = () => {
+			console.log('------')
 			mod.screenModes = {
 				Xs: '(max-width: 599px)',
 				GtXs: '(min-width: 600px)',
@@ -578,7 +584,7 @@ module.exports = (function(){
 			}
 	
 			_.each(mod.screenModes, function (value, key) {
-				mod.directive('class' + key, function ($window) {
+				mod.lazy.directive('class' + key, function ($window) {
 					return {
 						restrict: 'AE',
 						link: function link($scope, $elm, $attr) {
@@ -591,7 +597,7 @@ module.exports = (function(){
 					};
 				});
 	
-				mod.directive('is' + key, function ($window) {
+				mod.lazy.directive('is' + key, function ($window) {
 					return {
 						restrict: 'AE',
 						link: function link($scope, $elm, $attr) {
@@ -609,7 +615,11 @@ module.exports = (function(){
 				});
 			});
 		}
-	
+
+		mod.run(()=>{
+			mod.initScreenSizeDirectives();
+		});
+
 		//#endregion
 	
 		//#region Extensions

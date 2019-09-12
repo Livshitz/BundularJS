@@ -8,7 +8,7 @@ class Secrets {
 		this.secretsFile = srcFolder + '/project-secrets.json';
 		this.secretsFileOpen = srcFolder + '/project-secrets-open.json';
 		this.secretsFileEmpty = srcFolder + '/project-secrets-Empty.json';
-		this.secretsKey = (libx.node.args.secret != null) ? libx.node.args.secret.toString() : null;
+		this.secretsKey = (libx.node.args.secret != null) ? libx.node.args.secret.toString() : process.env.FUSER_SECRET_KEY;
 		// libx.log.info('!!! Secret key is: ', this.secretsKey);
 	}
 
