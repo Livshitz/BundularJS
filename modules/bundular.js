@@ -546,7 +546,6 @@ module.exports = (function(){
 		}
 	
 		mod.initScreenSizeDirectives = () => {
-			console.log('------')
 			mod.screenModes = {
 				Xs: '(max-width: 599px)',
 				GtXs: '(min-width: 600px)',
