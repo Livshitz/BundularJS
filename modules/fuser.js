@@ -164,10 +164,12 @@ var secrets = new Secrets(api.options.src);
 			], options.watch);
 		}
 
-		await Promise.all([p1, p2, p22, p3, p4, p5, p6, p7]);
+		var p8 = libx.pax.copy(options.src + '/resources/fonts/**/*', options.dest + '/resources/fonts/', null, false, { debug: false });
 
-		libx.pax.copy('./node_modules/bundularjs/dist/fonts/**/*', options.dest + '/resources/fonts/lib/', null, false, { debug: false });
-		libx.pax.copy('./node_modules/ng-inline-edit/dist/ng-inline-edit.js', options.dest + '/resources/scripts/lib/', null, false);
+		await Promise.all([p1, p2, p22, p3, p4, p5, p6, p7, p8]);
+
+		await libx.pax.copy('./node_modules/bundularjs/dist/fonts/**/*', options.dest + '/resources/fonts/lib/', null, false, { debug: false });
+		await libx.pax.copy('./node_modules/ng-inline-edit/dist/ng-inline-edit.js', options.dest + '/resources/scripts/lib/', null, false);
 		// libx.pax.copy('./node_modules/bundularjs/src/scripts/lib/angular-inview.js', options.dest + '/resources/scripts/lib/', null, false);
 
 		var pIndex = libx.pax.copy([options.src + '/index.pug'], options.dest, () => [
