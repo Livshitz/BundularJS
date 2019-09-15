@@ -170,7 +170,7 @@ module.exports = (function(){
 				var prevUrl = "/";
 				do{
 					prevUrl = mod.history.length > 1 ? mod.history.splice(-2)[0] : "/";
-				}while(prevUrl == cur || mod.history.length <= 0);
+				}while(prevUrl == cur || mod.history.length > 0);
 
 				// if (!app.isHtml5Mode) prevUrl = '/#!' + prevUrl;
 		
