@@ -30,7 +30,8 @@ class Secrets {
 	}
 
 	makeEmpty() {
-		libx.node.decryptFile(this.secretsFile, this.secretsKey, this.secretsFileOpen);
+		if (!fs.existsSync(this.secretsFileOpen))
+			libx.node.decryptFile(this.secretsFile, this.secretsKey, this.secretsFileOpen);
 		var content = fs.readFileSync(this.secretsFileOpen);
 		var obj = JSON.parse(content);
 		var empty = libx.makeEmpty(obj);

@@ -6126,10 +6126,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libx.js@^0.3.12:
-  version "0.3.12"
-  resolved "https://registry.yarnpkg.com/libx.js/-/libx.js-0.3.12.tgz#30a412cf80db40ba70bc3681b96cadfb2b7fdffa"
-  integrity sha512-nl52DaH3CKlZRg1N8+xZi7d6gGACeipL1X56Tr/QHioK1QA4izaUv8NPa0UUdkitvmHDNmVMpUfVHl4Ffzb4Jw==
+libx.js@^0.3.17:
+  version "0.3.17"
+  resolved "https://registry.yarnpkg.com/libx.js/-/libx.js-0.3.17.tgz#9c1d8621bba94c0d3d8a92f33329325c69b86814"
+  integrity sha512-cWhpokokdA0BX2BhnFWD2R3MlTy74Z1XSKg/9igPJZboBtm1rbouD0gCWwmNhsX1bRW4Urru0ovLJPrteHAtEg==
   dependencies:
     "@types/jest" "^24.0.15"
     "@types/lodash" "^4.14.136"
@@ -7512,10 +7512,10 @@ pause-stream@^0.0.11:
   dependencies:
     through "~2.3"
 
-pax.libx.js@^0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/pax.libx.js/-/pax.libx.js-0.1.9.tgz#de3b6b648f6807c7869491d3436030b6b9036161"
-  integrity sha512-gioTZjrcWee2EvpVX6AoEFd/6yeT0X/qigV+6U2nXLKhQmNbTfZvIXIE/+4dXpoA2/CvkFcWDtN3DjL1t6FBgw==
+pax.libx.js@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/pax.libx.js/-/pax.libx.js-0.1.11.tgz#c146626eec2abafcfdde9866ed6f210dcfdb2209"
+  integrity sha512-HVZpjwZb6iB1bcvmbNPrJAtKOOihX/VMMojaeBBfRFoCPj9lO+Jr/ONtgIpdgEE6ZCF8SLjnAlCA9q+mG7Hr4g==
   dependencies:
     "@babel/cli" "^7.4.4"
     "@babel/core" "^7.4.4"
@@ -7559,7 +7559,7 @@ pax.libx.js@^0.1.9:
     into-stream "^4.0.0"
     jest "^24.8.0"
     less-plugin-sass2less "^1.2.0"
-    libx.js "^0.3.12"
+    libx.js "^0.3.17"
     readable-stream "^3.3.0"
     through "^2.3.8"
     through2 "^3.0.0"
