@@ -5,8 +5,8 @@ module.exports = (function(bundular){
 		mod.options = {
 			routes: [],
 			sys_routes: [
-				new mod.Route('/_sys/theme', '/views/sys/_theme.html'),
-				new mod.Route('/_sys/icons', '/views/sys/_icons.html'),
+				new mod.Route('/_sys/theme', '/views/_sys/_theme.html'),
+				new mod.Route('/_sys/icons', '/views/_sys/_icons.html'),
 			],
 			notFoundTemplate: '',
 			isHtml5Mode: true, 

@@ -60,7 +60,7 @@ const argv = require("yargs").argv;
 				"node_modules/firebase/firebase-database.js",
 				"node_modules/firebase/firebase-storage.js"
 				// 'node_modules/firebase/firebase-firestore.js',
-				// 'node_modules/firebase/firebase-messaging.js',
+				// 'node_modules/firebase/firebase-messaging.js',m
 				// 'node_modules/firebase/firebase-functions.js',
 			],
 			dest + "/framework/",
