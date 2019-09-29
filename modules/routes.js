@@ -21,7 +21,10 @@ module.exports = (function(bundular){
 
 		bundular.config(($routeProvider, $sceDelegateProvider, $locationProvider) => {
 			_.each(mod.options.routes, route=> {
-				$routeProvider.when(route.path, { templateUrl: route.templateUrl } );
+				let opts = libx.extend({
+					templateUrl: route.templateUrl.replace(/\/\//g, '/'),
+				}, route.options || {});
+				$routeProvider.when(route.path, opts );
 			});
 			$routeProvider.otherwise({ templateUrl: mod.options.notFoundTemplate });
 
@@ -40,9 +43,10 @@ module.exports = (function(bundular){
 	};
 
 	mod.Route = class {
-		constructor(path, templateUrl) {
+		constructor(path, templateUrl, options) {
 			this.path = path;
 			this.templateUrl = templateUrl;
+			this.options = options;
 		}
 	}
 
