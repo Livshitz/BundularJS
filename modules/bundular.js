@@ -163,13 +163,23 @@ module.exports = (function(){
 				scope.$apply();
 			}
 
-			mod.goBack = function () {
+			mod.goBack = function (browserBack=false) {
 				libx.log.verbose('goBack');
+
+				if (browserBack) {
+					try {
+						window.history.go(-1); return false;
+					} catch (ex) {
+						libx.log.w('bundular:goBack: Error: ', ex);
+					}
+				}
+
 				var cur = $location.path();
 		
 				var prevUrl = "/";
 				do{
 					prevUrl = mod.history.length > 1 ? mod.history.splice(-2)[0] : "/";
+					mod.history.pop();
 				}while(prevUrl == cur || mod.history.length > 0);
 
 				// if (!app.isHtml5Mode) prevUrl = '/#!' + prevUrl;
