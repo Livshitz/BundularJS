@@ -660,6 +660,7 @@ module.exports = (function(){
 
 		mod.filter('reverse', function() {
 			return function(items) {
+				if (items == null) return null;
 				return items.slice().reverse();
 			};
 		});
@@ -782,6 +783,11 @@ module.exports = (function(){
 		mod.filter("trustUrl", ['$sce', function ($sce) {
 			return function (recordingUrl) {
 				return $sce.trustAsResourceUrl(recordingUrl);
+			};
+		}]);
+		mod.filter("trustSource", ['$sce', function ($sce) {
+			return function (html) {
+				return $sce.trustAsHtml(html);
 			};
 		}]);
 	
