@@ -32,13 +32,13 @@
         "angular-animate": "^1.7.6",
         "angular-aria": "^1.7.6",
         "angular-cookies": "^1.7.6",
-        "angular-material": "1.1.13",
+        "angular-material": "^1.1.20",
         "angular-resource": "^1.7.6",
         "angular-route": "^1.7.6",
         "angular-sanitize": "^1.7.6",
         "firebase": "^6.6.2",
         "jquery": "^3.3.1",
-        "libx.js": "^0.4.6"
+        "libx.js": "^0.4.9"
     },
     "devDependencies": {
         "pax.libx.js": "^0.1.11"

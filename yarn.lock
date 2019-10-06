@@ -1431,10 +1431,10 @@ angular-cookies@^1.7.6:
   resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.7.8.tgz#c674dcfd37168e3d7def6bed165a38f75f96dbc9"
   integrity sha512-oS2X8XLYyLrwSBUKmcGkHxphwTtAEdi3eriSwMX/WUl5D6fRZ4EcBY4DaHN+tYDnzJ1i2lFa82/oq0kTKxZmyg==
 
-angular-material@1.1.13:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/angular-material/-/angular-material-1.1.13.tgz#36c9cee590156f7e9d2be3bf6b2bf277f1293b4d"
-  integrity sha512-qWc5WOhRa/sbQmiRwenOla2Pky3w+wgW0l5Wp3J6jmB/WWxMWW7+JMdCXo1diGEETTKTF2vLdeWTceDTNehmSw==
+angular-material@^1.1.20:
+  version "1.1.20"
+  resolved "https://registry.yarnpkg.com/angular-material/-/angular-material-1.1.20.tgz#138def4a4f3982fddfa7788c9775e663f12cba85"
+  integrity sha512-R2jILX9g7AVvEZbIMqEp8mkjlH/iSrDG150pCSzL7+6PHdi4dYuyXNRtYlpYKe+72Q4fIV4YBYSxepNob3hU9A==
 
 angular-resource@^1.7.6:
   version "1.7.8"
@@ -6237,10 +6237,10 @@ libx.js@^0.3.17:
     typings "^2.1.1"
     yargs "^12.0.5"
 
-libx.js@^0.4.6:
-  version "0.4.6"
-  resolved "https://registry.yarnpkg.com/libx.js/-/libx.js-0.4.6.tgz#70f9815b458eef414768f45fd7adc23f9828018a"
-  integrity sha512-j+xfeiENFACsjNoSJZWJTZd2dE/HydyvxhTPVWvE8rd0K/Oa+takxHRnzrvD2MNdCJdijl4Pl0c9ktctBmjZOQ==
+libx.js@^0.4.9:
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/libx.js/-/libx.js-0.4.9.tgz#e6319565a018bfad05e6df5878dda13822a0c650"
+  integrity sha512-/OKModviAMjADhrdxO+2SFEi6LRGg1u+quc7CeonnIHqTHMh62B4mXhw3ZJqA+DWJBKfqVio1kGudcfUO9pWWw==
   dependencies:
     "@types/jest" "^24.0.15"
     "@types/lodash" "^4.14.136"
