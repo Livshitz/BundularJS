@@ -378,9 +378,10 @@ module.exports = (function(){
 			$("html, body").animate({scrollTop: scrollTo}, "fast");
 		}
 	
-		mod.navigate = (url, params)=> { 
+		mod.navigate = (url, params=null)=> { 
 			var l = url || mod.ngGet('$location').path();
-			var ret = mod.ngGet('$location').path(l, params); 
+			var ret = mod.ngGet('$location').path(l)
+			if (params) ret.search(params); 
 			mod.ngGet('$rootScope').safeApply(); 
 			return ret;
 		};
@@ -530,7 +531,7 @@ module.exports = (function(){
 			$mdToast.show({
 				template: '<md-toast class="md-toast ' + type +'"><i class="md-icons">' + icon + "</i>&nbsp;" + msg + '</md-toast>',
 				hideDelay: delay,
-				paren: mod._angular.element('.layout-content'),
+				parent: mod._angular.element('.layout-content'),
 				position: pos
 				// textContent: ''
 			});

@@ -38,7 +38,7 @@
         "angular-sanitize": "^1.7.6",
         "firebase": "^6.6.2",
         "jquery": "^3.3.1",
-        "libx.js": "^0.4.9"
+        "libx.js": "^0.4.10"
     },
     "devDependencies": {
         "pax.libx.js": "^0.1.11"
