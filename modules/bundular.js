@@ -417,6 +417,45 @@ module.exports = (function(){
 	
 		//#region UI Helpers
 
+		mod.showAlert = (title, content, callback=null, options={})=>{
+			var p = libx.newPromise();
+			var options = options || {};
+			var $mdDialog = bundular.ngGet('$mdDialog');
+			var confirm = $mdDialog.alert()
+				.title(title)
+				.textContent(content)
+				.ok(options.ok || 'Ok')
+		
+			$mdDialog.show(confirm).then(async (result)=>{
+				if (callback) callback(result);
+				p.resolve(result);
+			}, function() {
+				if (callback) callback(null);
+				p.resolve(null);
+			});
+			return p;
+		}
+		
+		mod.showConfirm = (title, callback=null, options={})=>{
+			var p = libx.newPromise();
+			var options = options || {};
+			var $mdDialog = bundular.ngGet('$mdDialog');
+			var confirm = $mdDialog.confirm()
+				.title(title)
+				.textContent(options.content)
+				.ok(options.ok || 'Ok')
+				.cancel(options.cancel || 'Cancel');
+		
+			$mdDialog.show(confirm).then(async (result)=>{
+				if (callback) callback(result);
+				p.resolve(result);
+			}, function() {
+				if (callback) callback(null);
+				p.resolve(null);
+			});
+			return p;
+		}
+
 		mod.showPrompt = function(title, callback, options) {
 			// Appending dialog to document.body to cover sidenav in docs app
 			var p = libx.newPromise();
@@ -582,7 +621,7 @@ module.exports = (function(){
 	
 			function resizeFunc($window, $scope, $elm, $attr, event) {
 				var clientWidth = document.documentElement.clientWidth;
-				libx.log.verbose('resizeFunc');
+				libx.log.d('resizeFunc');
 	
 				_.each(mod.screenModes, function (value, key) {
 					if ($window.matchMedia(value).matches) {
