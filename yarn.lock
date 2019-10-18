@@ -6237,17 +6237,16 @@ libx.js@^0.3.17:
     typings "^2.1.1"
     yargs "^12.0.5"
 
-libx.js@^0.4.9:
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/libx.js/-/libx.js-0.4.9.tgz#e6319565a018bfad05e6df5878dda13822a0c650"
-  integrity sha512-/OKModviAMjADhrdxO+2SFEi6LRGg1u+quc7CeonnIHqTHMh62B4mXhw3ZJqA+DWJBKfqVio1kGudcfUO9pWWw==
+libx.js@^0.4.12:
+  version "0.4.12"
+  resolved "https://registry.yarnpkg.com/libx.js/-/libx.js-0.4.12.tgz#a46bb4ccd25b4b3b6db912804fe861e4ac694356"
+  integrity sha512-SYjHQ/JGs9mJhtaSItk5m2lWCgcjYpwcRCWAATeXAV/C3dfoE/6CaKyTpPn7InFKKGz5M+mkBjkkxvhsvtd3uQ==
   dependencies:
     "@types/jest" "^24.0.15"
     "@types/lodash" "^4.14.136"
     "@types/node" "^12.6.8"
     buffer "^5.2.1"
     crypto-js "^3.1.9-1"
-    deferred-js "^1.0.2"
     glob "^7.1.4"
     json-bump "^0.1.3"
     lodash "^4.17.11"

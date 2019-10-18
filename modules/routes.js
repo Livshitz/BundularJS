@@ -17,6 +17,24 @@ module.exports = (function(bundular){
 		mod.options = libx.extend(mod.options, _options);
 		libx.log.d('bundular:routes: options', mod.options);
 
+		var curDomain = libx.browser.helpers.getDomain();
+		var curSubdomain = libx.browser.helpers.getSubDomain();
+		if (curSubdomain == '0') curSubdomain = null;
+
+		// Filter routes with matching specified domain, or with no domain
+		mod.options.routes = mod.options.routes.filter(x=>{
+			if (x.options == null || x.options.domain == null) return true;
+			return x.options.domain == curDomain;
+		});
+
+		// Filter only specified matching subdomain
+		if (curSubdomain != null) {
+			mod.options.routes = mod.options.routes.filter(x=>{
+				if (x.options == null) return null;
+				return x.options.subdomain == curSubdomain;
+			});
+		}
+
 		mod.options.routes = _.concat(mod.options.routes, mod.options.sys_routes); 
 
 		bundular.config(($routeProvider, $sceDelegateProvider, $locationProvider) => {
