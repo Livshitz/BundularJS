@@ -36,9 +36,11 @@
         "angular-resource": "^1.7.6",
         "angular-route": "^1.7.6",
         "angular-sanitize": "^1.7.6",
+        "animate.css": "^3.7.2",
         "firebase": "^6.6.2",
         "jquery": "^3.3.1",
-        "libx.js": "^0.4.12"
+        "libx.js": "^0.4.12",
+        "sal.js": "^0.6.3"
     },
     "devDependencies": {
         "pax.libx.js": "^0.1.11"

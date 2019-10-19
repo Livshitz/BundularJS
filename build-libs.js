@@ -133,7 +133,7 @@ const argv = require("yargs").argv;
 		await Promise.all([p1, p2, p3, p4, p5, p6, p7]);
 
 		await libx.pax.copy(
-			[dest + "/styles/*.css"],
+			[dest + "/styles/*.css", "./node_modules/sal.js/dist/sal.css", "./node_modules/animate.css/animate.min.css"],
 			dest + "/framework/",
 			() => [
 				libx.pax.middlewares.concat("bundle.styles.css"),

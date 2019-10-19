@@ -7,6 +7,9 @@ module.exports = (function(){
 		var templates = angular.module('templates', []);
 		var deps = ['ngAnimate', 'ngMaterial', 'ngCookies', 'ngResource', 'ngRoute', 'templates'];
 		mod = angular.module('bundular', deps);
+
+		// CommonJS modules
+		mod.sal = require('sal.js')
 		
 		mod._angular = angular;
 		mod.extend = mod._angular.extend;
