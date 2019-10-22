@@ -548,6 +548,10 @@ module.exports = (function(){
 		mod.reload = function() {
 			mod.ngGet('$window').location.reload();
 		}
+		
+		mod.reset = function() {
+			mod.ngGet('$route').reload();
+		}
 	
 		mod.autoNameInputs = function(){
 			//libx.log.verbose('autoNameInputs')
