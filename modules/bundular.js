@@ -148,7 +148,6 @@ module.exports = (function(){
 				}
 				
 				// mod.autoNameInputs();
-				
 				mod.$scope = window.$scope = mod.ngScopeInline();
 				mod.$rootScope = window.$rootScope = mod.$scope.$root;
 
