@@ -150,6 +150,7 @@ var secrets = new Secrets(api.options.src);
 		], options.watch);
 
 		var p6 = libx.pax.copy(options.src + '/resources/imgs/**/*', options.dest + '/resources/imgs/', null, options.watch);
+		var p62 = libx.pax.copy(options.src + '/resources/*', options.dest + '/resources/', null, options.watch);
 
 		var p7 = null;
 		if (options.skipCompiled != true) {
@@ -166,7 +167,7 @@ var secrets = new Secrets(api.options.src);
 
 		var p8 = libx.pax.copy(options.src + '/resources/fonts/**/*', options.dest + '/resources/fonts/', null, false, { debug: false });
 
-		await Promise.all([p1, p2, p22, p3, p4, p5, p6, p7, p8]);
+		await Promise.all([p1, p2, p22, p3, p4, p5, p6, p62, p7, p8]);
 
 		await libx.pax.copy('./node_modules/bundularjs/dist/fonts/**/*', options.dest + '/resources/fonts/lib/', null, false, { debug: false });
 		await libx.pax.copy('./node_modules/ng-inline-edit/dist/ng-inline-edit.js', options.dest + '/resources/scripts/lib/', null, false);
