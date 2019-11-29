@@ -109,6 +109,7 @@ const argv = require("yargs").argv;
 				"!" + src + "/styles/lib/**/*",
 				"node_modules/angular-material/angular-material.css",
 				"node_modules/angular-material/angular-material.scss",
+				"node_modules/flexboxgrid/dist/flexboxgrid.css",
 			],
 			dest + "/styles/",
 			()=> [ libx.pax.middlewares.renameFunc(f => (f.dirname =  "." )) ],
@@ -133,7 +134,12 @@ const argv = require("yargs").argv;
 		await Promise.all([p1, p2, p3, p4, p5, p6, p7]);
 
 		await libx.pax.copy(
-			[dest + "/styles/*.css", "./node_modules/sal.js/dist/sal.css", "./node_modules/animate.css/animate.min.css"],
+			[
+				dest + "/styles/*.css", 
+				"./node_modules/sal.js/dist/sal.css", 
+				"./node_modules/animate.css/animate.min.css",
+				"./node_modules/flexboxgrid/dist/flexboxgrid.css",
+			],
 			dest + "/framework/",
 			() => [
 				libx.pax.middlewares.concat("bundle.styles.css"),
